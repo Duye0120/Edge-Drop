@@ -11,12 +11,13 @@ import { existsSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { PATHS } from '../store/paths'
 import { loadSettings, saveSettings } from '../store/settings'
-import { getMainWindow, setVisible, repositionWindow, getDisplayListOptions, registerWindowRepositionListener, popUpAndRetract } from './window'
+import { getMainWindow, setVisible, setInteractive, repositionWindow, getDisplayListOptions, registerWindowRepositionListener, popUpAndRetract } from './window'
 import type { StickPosition } from '../../shared/types'
 import { pushState } from './state'
 import { createOnboardingWindow } from './onboardingWindow'
 import { en } from '../../src/i18n/translations'
 import { mainT, resolveLang } from './i18n'
+import { preferenceStrings } from '../../shared/preferences'
 
 let tray: Tray | null = null
 let themeListenerRegistered = false
@@ -176,6 +177,17 @@ function getTrayText(settingsLang: string | undefined, key: keyof typeof en['tra
     const t = (k: keyof typeof en['tray']) => getTrayText(settings.language, k)
 
     const menu = Menu.buildFromTemplate([
+      {
+        label: preferenceStrings(resolveLang(settings.language)).gameMode,
+        type: 'checkbox',
+        checked: settings.gameMode ?? false,
+        click: (item) => {
+          const next = saveSettings({ gameMode: item.checked })
+          pushState.settings(next)
+          if (next.gameMode) { pushState.togglePanel(false); setInteractive(false) }
+          rebuild()
+        }
+      },
       {
         label: t('showClipboard'),
         click: () => {

@@ -33,6 +33,7 @@ import { isPasteableEmoji } from '../../shared/emoji'
 import { emojiAssetDir, readEmojiBatch, resolveIconAsset } from './imageProtocol'
 import { saveItemImages } from './saveImages'
 import { BoardStore } from '../store/BoardStore'
+import { getSystemFonts } from './systemFonts'
 
 const board = new BoardStore()
 
@@ -201,6 +202,7 @@ export async function syncLoginItemSettings(launchAtLogin?: boolean): Promise<vo
 }
 
 export function registerIpc(): void {
+  handle('fonts:list', () => getSystemFonts())
   handle('board:load', () => board.load())
   handle('board:execute', (command) => {
     const snapshot = board.execute(command)
@@ -773,6 +775,10 @@ export function registerIpc(): void {
       }
     }
     let next = saveSettings(enrichedPatch)
+    if (patch.gameMode === true) {
+      pushState.togglePanel(false)
+      setInteractive(false)
+    }
     if (patch.launchAtLogin !== undefined) {
       const applied = await applyLaunchAtLogin(patch.launchAtLogin)
       if (applied.enabled !== next.launchAtLogin) {

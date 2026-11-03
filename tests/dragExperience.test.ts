@@ -156,7 +156,7 @@ describe('edge bar pull and catch (lib/edgeDrag.ts)', () => {
 describe('edge hover: a drag from another app', () => {
   const hook = read('src/hooks/useEdgeHover.ts')
   it('follows the hover setting and ignores our own drags', () => {
-    expect(hook).toContain("const drag = !!data.drag && !state.internalDragReq && (state.settings.hoverActivation ?? true)")
+    expect(hook).toContain("const drag = !!data.drag && !state.internalDragReq && hoverOpeningEnabled(state.settings)")
   })
   it('opens only after resting in the catch, and only while the drag is still on', () => {
     expect(hook).toMatch(/if \(inEdgeDragCatch\(lane, data\.x, data\.y\)\) \{\n\s+if \(dragOpenTimer === undefined\) \{\n\s+dragOpenTimer = window\.setTimeout\(\(\) => \{\n\s+dragOpenTimer = undefined\n\s+if \(useStore\.getState\(\)\.externalDrag\) openPanel\(\)\n\s+\}, DRAG_CATCH_DWELL_MS\)/)
@@ -240,7 +240,7 @@ describe('drag looks', () => {
     expect(panelCss).not.toMatch(/edge-drag-cue[^{]*\{[^}]*infinite/)
     expect(panelCss).toContain("[data-motion='reduce'] .edge-drag-cue {\n  transition: none;\n  animation: none;")
     // never over a shelf that is still drawing back
-    expect(panel).toContain('const showDragCue = externalDrag && !open && closeSettled && !startupBeacon')
+    expect(panel).toContain('const showDragCue = !settings.gameMode && externalDrag && !open && closeSettled && !startupBeacon')
     expect(panel).toMatch(/const timer = window\.setTimeout\(\(\) => setCloseSettled\(true\), 320\)/)
   })
 

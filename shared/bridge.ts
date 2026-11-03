@@ -9,6 +9,7 @@ import type { Settings } from './types'
 import type { DragRequest } from './types'
 
 export interface EdgeApi {
+  getSystemFonts: () => Promise<string[]>
   loadBoard: () => Promise<import('./board').BoardSnapshot>
   executeBoard: (command: import('./board').BoardCommand) => Promise<import('./board').BoardSnapshot>
   onBoardChanged: (cb: (snapshot: import('./board').BoardSnapshot) => void) => () => void

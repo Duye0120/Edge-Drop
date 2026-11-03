@@ -26,6 +26,7 @@ import { WorkAreaCache } from './workAreaCache'
 import { probeSeamAware, isNearProximity, type SeamTickState } from './stickProbe'
 import { loadSettings, saveSettings } from '../store/settings'
 import { isFullscreenAppActive, registerFullscreenActiveListener } from './fullscreen'
+import { closeForDetectedFullscreen, suppressAutomaticOpen } from '../../shared/preferences'
 import { noteUiMotion } from './thumbnailCache'
 import { isExternalDragActive } from './externalDrag'
 
@@ -536,7 +537,7 @@ function _pollTick(): void {
   if (runtime.quitting || !mainWindow || mainWindow.isDestroyed() || !mainWindow.isVisible()) return
 
   const settings = loadSettings()
-  if (settings.suppressInFullscreen && isFullscreenAppActive()) return
+  if (!interactive && suppressAutomaticOpen(settings, isFullscreenAppActive())) return
 
   const pt = screen.getCursorScreenPoint()
 
@@ -856,7 +857,7 @@ export function createWindow(): BrowserWindow {
 
   registerFullscreenActiveListener(() => {
     const settings = loadSettings()
-    if (settings.suppressInFullscreen && (settings.hoverActivation ?? true)) {
+    if (closeForDetectedFullscreen(settings)) {
       sendToMainWindow('window:toggle', false)
       setInteractive(false)
     }
@@ -1076,6 +1077,7 @@ export function getDisplayListOptions(): Array<{
 
 let popUpTimer: ReturnType<typeof setTimeout> | null = null
 export function popUpAndRetract(durationMs = 1500): void {
+  if (suppressAutomaticOpen(loadSettings(), isFullscreenAppActive())) return
   if (!mainWindow || mainWindow.isDestroyed() || !mainWindow.webContents || mainWindow.webContents.isDestroyed()) return
   if (mainWindow.isMinimized()) mainWindow.restore()
   mainWindow.showInactive()
@@ -1090,6 +1092,7 @@ export function popUpAndRetract(durationMs = 1500): void {
   if (!wasAlreadyOpen) {
     popUpTimer = setTimeout(() => {
       popUpTimer = null
+      if (loadSettings().gameMode) return
       if (mainWindow && !mainWindow.isDestroyed()) {
         console.log('[Main] Retracting panel after brief confirmation pop-up')
         sendToMainWindow('window:toggle', false)

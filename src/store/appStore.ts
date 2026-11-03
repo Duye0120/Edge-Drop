@@ -81,6 +81,7 @@ export interface UpdateProgress {
 interface AppState {
   /** Holds the blade while a personal card's native date picker is open. */
   boardEditing: boolean
+  preferencesEditing: boolean
   items: ClipboardItemDto[]
   settings: Settings
   /** True until the first `state:load` resolves. */
@@ -316,6 +317,7 @@ export const useStore = create<AppState>((set, get) => ({
   previewItemId: null,
   previewItemRect: null,
   boardEditing: false,
+  preferencesEditing: false,
   sliderActive: false,
   sliderReleasedTime: 0,
   setSliderActive: (active) => set({
@@ -596,6 +598,7 @@ export const useStore = create<AppState>((set, get) => ({
     }
   },
   triggerCopyFlare: () => {
+    if (get().settings.gameMode) return
     if (get().settings.showCopyIndicator === false) return
     if (flareTimer) clearTimeout(flareTimer)
     // Already showing: only extend the hold. Restarting flareKey mid-flight

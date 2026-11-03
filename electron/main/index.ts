@@ -137,13 +137,13 @@ app.whenReady().then(() => {
   // The tour plays in the device's own language (Onboarding.tsx); the saved language is left as it is.
   if (tour === 'first-run' && !hiddenLaunch) {
     setTimeout(() => {
-      createOnboardingWindow()
+      if (!loadSettings().gameMode) createOnboardingWindow()
     }, 2000)
   } else if (tour === 'update') {
     // Someone who finished an older tour sees this one once. Also on a silent start at login (many
     // only ever start Edge-Drop that way), later, once Windows has settled.
     setTimeout(() => {
-      createOnboardingWindow()
+      if (!loadSettings().gameMode) createOnboardingWindow()
     }, hiddenLaunch ? UPDATE_TOUR_DELAY_AT_LOGIN_MS : 2000)
   }
   setHotZoneWidth(settings.hotZoneWidth || 3)

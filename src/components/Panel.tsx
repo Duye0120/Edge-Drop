@@ -108,7 +108,7 @@ export function Panel() {
   // panel's own box (measured here), with the same strip insets.
   const containerRef = useRef<HTMLDivElement>(null)
   const showEdgeHint = !!edgeHintActive && (settings.showEdgeLocationHint ?? false)
-  const showEdgeBeacon = !open && (startupBeacon || showEdgeHint)
+  const showEdgeBeacon = !settings.gameMode && !open && (startupBeacon || showEdgeHint)
   // A drag from another app is on its way: the bar swells, ready for it
   // (placed like the beacon, see EdgeDragCue). After the shelf closes it waits
   // for the close to finish, so it never appears over the shape drawing back.
@@ -122,7 +122,7 @@ export function Panel() {
     const timer = window.setTimeout(() => setCloseSettled(true), 320)
     return () => window.clearTimeout(timer)
   }, [open])
-  const showDragCue = externalDrag && !open && closeSettled && !startupBeacon
+  const showDragCue = !settings.gameMode && externalDrag && !open && closeSettled && !startupBeacon
   const [beaconFrame, setBeaconFrame] = useState<{ left: number; top: number; width: number; height: number } | null>(null)
   useLayoutEffect(() => {
     if (!(showEdgeBeacon || showDragCue) || !containerRef.current) return
@@ -361,6 +361,7 @@ export function Panel() {
     transition: mounted ? currentTransition : 'none',
     opacity: currentOpacity
   }
+  if (settings.gameMode && !open) containerStyle.visibility = 'hidden'
   if (isTransitioning) {
     containerStyle.willChange = 'clip-path, opacity'
   }
@@ -466,7 +467,7 @@ export function Panel() {
 
   return (
     <div className="root">
-      <CopyIndicatorCurve />
+      {!settings.gameMode && <CopyIndicatorCurve />}
       <AnimatePresence>
         {showEdgeBeacon && beaconFrame && (
           <motion.div
@@ -599,9 +600,9 @@ export function Panel() {
           />
 
           <ToastStack />
-          {!settingsOpen && !demo && <div className="shelf-modes" role="group" aria-label={boardStrings().board}>
-            <button type="button" aria-pressed={!personal} onClick={() => setPersonal(false)}>{boardStrings().clipboard}</button>
-            <button type="button" aria-pressed={personal} onClick={() => {
+          {!settingsOpen && !demo && <div className="shelf-modes settings-tab-bar" role="group" aria-label={boardStrings().panelModes}>
+            <button type="button" className={`settings-tab-btn${!personal ? ' active' : ''}`} aria-pressed={!personal} onClick={() => setPersonal(false)}>{boardStrings().clipboard}</button>
+            <button type="button" className={`settings-tab-btn${personal ? ' active' : ''}`} aria-pressed={personal} onClick={() => {
               setEmojiOpen(false)
               const state = useStore.getState()
               state.setPreviewItemId(null)

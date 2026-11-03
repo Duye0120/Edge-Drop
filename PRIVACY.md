@@ -4,6 +4,8 @@ Last updated: November 3, 2026
 
 This fork keeps clipboard history, settings, tasks and notes on your computer. It has no analytics or telemetry. The tasks and notes feature does not send card content to a server or add it to clipboard history.
 
+Game mode pauses automatic panel activation and visual hints; it does not pause clipboard capture. Existing incognito and retention settings still govern capture. The interface-font setting reads installed family names locally and stores your selected name in local settings. The font list and preview text are not sent to a service, and this feature does not download or upload fonts.
+
 ## Network activity
 
 Automatic and manual application update checks, downloads and installation are disabled in this fork, including when an existing profile has automatic updates enabled. It does not contact upstream GitHub releases. Packaging metadata points to `Duye0120/Edge-Drop`; this branch does not provide an update feed.

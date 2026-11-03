@@ -16,6 +16,7 @@ import type { ClipboardItemDto, DragRequest, MergeResult, Settings } from './typ
 /* ------------------------------------------------------------------ */
 
 export interface InvokeMap {
+  'fonts:list': { args: []; result: string[] }
   'board:load': { args: []; result: import('./board').BoardSnapshot }
   'board:execute': { args: [command: import('./board').BoardCommand]; result: import('./board').BoardSnapshot }
   /** Returns the full current item list + settings on startup. */

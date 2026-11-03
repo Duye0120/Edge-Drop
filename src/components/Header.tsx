@@ -145,7 +145,7 @@ export function Header({ personal = false, isHorizontal = false, itemCount, clea
             <EmojiSmileIcon width={14} height={14} />
           </button>
         </div>
-        {personal && !settingsOpen && <span style={{ gridArea: '1 / 1 / 2 / 2', fontSize: 13, fontWeight: 600 }}>{boardStrings().board}</span>}
+        {personal && !settingsOpen && <span style={{ gridArea: '1 / 1 / 2 / 2', fontSize: 'calc(13px * var(--font-scale, 1))', fontWeight: 600 }}>{boardStrings().board}</span>}
         {isHorizontal ? (
           <div
             aria-hidden={!settingsOpen}

@@ -1,0 +1,12 @@
+.font-picker { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.font-picker select, .font-picker input { width: 100%; min-width: 0; border: 1px solid var(--edge-strong); border-radius: 10px; background: var(--bg-0); color: var(--text-primary); padding: 8px; font: inherit; font-size: calc(12px * var(--font-scale, 1)); color-scheme: dark; }
+.font-picker select:focus-visible, .font-picker input:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
+.font-picker p { margin: 0; font-size: calc(11.5px * var(--font-scale, 1)); line-height: 1.5; color: var(--text-secondary); overflow-wrap: anywhere; }
+.font-picker .font-preview { font-size: calc(13px * var(--font-scale, 1)); color: var(--text-primary); }
+.font-custom { display: flex; flex-wrap: wrap; gap: 8px; }
+.font-custom input { flex: 1 1 120px; }
+.font-custom button { flex: 0 1 auto; padding-inline: 12px; }
+.font-picker .font-error { color: var(--act-danger); }
+.font-picker > button { align-self: flex-start; padding-left: 0; font-size: calc(12px * var(--font-scale, 1)); }
+.set-group.is-h[data-group="interface-font"] .set-row-main { flex-shrink: 0; }
+.set-group.is-h[data-group="interface-font"] .set-row-below { flex: 1; min-height: 0; overflow-y: auto; margin-top: 6px; padding-top: 2px; }

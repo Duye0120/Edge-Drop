@@ -13,7 +13,7 @@ export function getResolvedLanguage(settingLang?: string): string {
   if (!g.window || !g.window.navigator) return 'en'
   const navLang = ((g.window.navigator.language as string) || '').toLowerCase()
 
-  if (navLang.startsWith('zh-tw') || navLang.startsWith('zh-hk')) return 'zh-TW'
+  if (navLang.startsWith('zh-tw') || navLang.startsWith('zh-hk') || navLang.startsWith('zh-hant')) return 'zh-TW'
   if (navLang.startsWith('zh')) return 'zh-CN'
   if (navLang.startsWith('es')) return 'es'
   if (navLang.startsWith('fr')) return 'fr'
@@ -153,6 +153,7 @@ export function useTranslation() {
   // Update text direction for RTL languages like Arabic, Persian & Hebrew
   const g = globalThis as any
   if (g.document && g.document.documentElement) {
+    g.document.documentElement.lang = resolvedLang
     const isRtl = resolvedLang === 'ar' || resolvedLang === 'fa' || resolvedLang === 'he'
     g.document.documentElement.dir = isRtl ? 'rtl' : 'ltr'
   }

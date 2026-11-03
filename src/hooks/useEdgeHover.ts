@@ -27,6 +27,7 @@ import { useEffect, useRef } from 'react'
 import { edge } from '../lib/edge'
 import { useStore } from '../store/appStore'
 import { normalizeHoverOpenDelay } from '../../shared/types'
+import { hoverOpeningEnabled } from '../../shared/preferences'
 import { DRAG_CATCH_DWELL_MS, edgeDragPull, inEdgeDragCatch, setEdgeDragPull, type EdgeDragLane } from '../lib/edgeDrag'
 
 const TRIGGER_PX = 3    // leftmost px that count as "the edge"
@@ -292,7 +293,7 @@ export function useEdgeHover(): void {
     const closePanel = () => {
       const state = useStore.getState()
       if (!state.open) return
-      if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return
+      if (state.sliderActive || state.boardEditing || state.preferencesEditing || state.edgeTransition?.active) return
       if (state.dragActive && !state.internalDragReq) return
 
       // If any flyout is open, let it play its exit spring first.
@@ -328,7 +329,7 @@ export function useEdgeHover(): void {
 
     const scheduleClose = (delay = GRACE_MS) => {
       const state = useStore.getState()
-      if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return
+      if (state.sliderActive || state.boardEditing || state.preferencesEditing || state.edgeTransition?.active) return
       if (state.dragActive && !state.internalDragReq) return
       if (graceTimer !== undefined) return // already closing
 
@@ -379,6 +380,7 @@ export function useEdgeHover(): void {
     }
 
     const openPanel = () => {
+      if (!hoverOpeningEnabled(useStore.getState().settings)) return
       cancelClose()
       if (dwellTimer !== undefined) {
         window.clearTimeout(dwellTimer)
@@ -399,6 +401,7 @@ export function useEdgeHover(): void {
       } catch { /* ignore IPC errors; close path still governs state */ }
       if (useStore.getState().open) return
       const commitOpen = () => {
+        if (!hoverOpeningEnabled(useStore.getState().settings)) return
         if (useStore.getState().open) return
         useStore.getState().setOpen(true)
       }
@@ -429,7 +432,7 @@ export function useEdgeHover(): void {
 
     const isInsideBlade = () => {
       const state = useStore.getState()
-      if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return true
+      if (state.sliderActive || state.boardEditing || state.preferencesEditing || state.edgeTransition?.active) return true
       if (state.cardMenu && cardMenuHolds(state.cardMenu, state.cardMenuRect, cursorInWindow(state, lastClient.current))) return true
       const timeSincePositionChange = state.sliderReleasedTime > 0 ? Date.now() - state.sliderReleasedTime : Infinity
       if (timeSincePositionChange < 1750) return true
@@ -524,11 +527,18 @@ export function useEdgeHover(): void {
       const state = useStore.getState()
       const { stickPosition, displayWidth } = data
       const { top, bottom, midY, panelHalfH } = zone.current
+      if (state.settings.gameMode && !state.open) {
+        if (dwellTimer !== undefined) { window.clearTimeout(dwellTimer); dwellTimer = undefined }
+        clearDragOpen()
+        if (state.externalDrag) state.setExternalDrag(false)
+        if (state.edgeHintActive) state.setEdgeHintActive(false)
+        return
+      }
 
       // ── A drag from another app (anywhere on screen) ─────────────────────
       // Follows the hover setting: with hover opening off, cursor moves never
       // open the shelf, dragged or not.
-      const drag = !!data.drag && !state.internalDragReq && (state.settings.hoverActivation ?? true)
+      const drag = !!data.drag && !state.internalDragReq && hoverOpeningEnabled(state.settings)
       if (state.externalDrag !== drag) state.setExternalDrag(drag)
       if (drag && !state.open) {
         const dispW = displayWidth || displaySize.current.width

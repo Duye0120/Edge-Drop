@@ -196,6 +196,8 @@ export interface Settings {
    * On by default to prevent accidental opening during PC gameplay.
    */
   suppressInFullscreen: boolean
+  /** Manual suppression of automatic openings and edge hints; explicit hotkey/tray access remains available. */
+  gameMode?: boolean
   /** When true, shows the visual edge morph indicator on copy actions. Default: true. */
   showCopyIndicator: boolean
   /** Style variant of the copy indicator icon ('logo' | 'check' | 'copy' | 'sparkle'). Default: 'logo'. */
@@ -222,6 +224,8 @@ export interface Settings {
   hoverOpenDelay?: number
   /** Font size scale multiplier (0.85 = Small, 1.00 = Normal, 1.15 = Large). Default: 1.0. */
   fontSizeScale?: number
+  /** A single installed/local font family; empty uses the bundled defaults. */
+  uiFontFamily?: string
   /** When true, automatically checks for and downloads app updates in background. Default: true. Legacy: kept in sync from updateMode for downgrade safety. */
   autoUpdates?: boolean
   /**
@@ -261,6 +265,7 @@ export const DEFAULT_SETTINGS: Settings = {
   stickDisplayWorkArea: undefined,
   stickDisplayScaleFactor: undefined,
   suppressInFullscreen: true,
+  gameMode: false,
   showCopyIndicator: true,
   copyIndicatorStyle: 'logo',
   verticalOffset: 0.5,
@@ -272,6 +277,7 @@ export const DEFAULT_SETTINGS: Settings = {
   hoverActivation: true,
   hoverOpenDelay: 0,
   fontSizeScale: 1.0,
+  uiFontFamily: '',
   autoUpdates: true,
   updateMode: 'auto',
   skippedUpdateVersion: undefined,

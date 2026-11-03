@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '../store/appStore'
 import type { DisplayInfo } from '../../shared/types'
 import { boardStrings } from '../i18n/board'
+import { preferenceStrings } from '../../shared/preferences'
+import { FontPicker } from './FontPicker'
 import {
   resolveUpdateMode,
   normalizeHoverOpenDelay,
@@ -82,6 +84,7 @@ export function Settings({
   isHorizontal?: boolean
 }) {
   const { t, language, languages, resolvedLang } = useTranslation()
+  const preferences = preferenceStrings(resolvedLang)
   const settings = useStore((s) => s.settings)
   const isHorizontal = propIsHorizontal ?? (settings.stickPosition === 'top')
 
@@ -142,7 +145,7 @@ export function Settings({
     let alive = true
     void document.fonts?.ready.then(() => { if (alive) fitSettingsColumns(track) })
     return () => { alive = false }
-  }, [isHorizontal, horizontalTab, resolvedLang, settings.fontSizeScale])
+  }, [isHorizontal, horizontalTab, resolvedLang, settings.fontSizeScale, settings.uiFontFamily])
 
   // Restore target section's independent horizontal scroll position when tab changes
   useLayoutEffect(() => {
@@ -961,9 +964,15 @@ export function Settings({
           label: t('tabs.activationShortcuts') || 'SHORTCUTS & HOVER',
           rows: [
             {
+              id: 'game-mode',
+              title: preferences.gameMode,
+              desc: preferences.gameDesc.replace('{shortcut}', settings.toggleHotkey || 'Alt+C'),
+              trailing: <Toggle label={preferences.gameMode} checked={settings.gameMode ?? false} onChange={(value) => { void patch({ gameMode: value }) }} />
+            },
+            {
               id: 'hover-activation',
               title: t('behaviour.hoverActivationTitle'),
-              desc: hoverOn
+              desc: settings.gameMode ? preferences.gameStatus : hoverOn
                 ? t('behaviour.hoverActivationDescOn')
                 : t('behaviour.hoverActivationDescOff', { shortcut: settings.toggleHotkey || 'Alt+C' }),
               trailing: (
@@ -982,7 +991,7 @@ export function Settings({
             {
               id: 'fullscreen',
               title: t('behaviour.fullscreenProtectionTitle'),
-              desc: hoverOn ? t('behaviour.fullscreenProtectionDesc') : t('behaviour.disabledHoverOff'),
+              desc: settings.gameMode ? preferences.gameStatus : hoverOn ? t('behaviour.fullscreenProtectionDesc') : t('behaviour.disabledHoverOff'),
               disabled: !hoverOn,
               trailing: (
                 <Toggle
@@ -995,7 +1004,7 @@ export function Settings({
             {
               id: 'hover-delay',
               title: t('behaviour.hoverDelayTitle') || 'Open Delay',
-              desc: hoverOn ? (t('behaviour.hoverDelayDesc') || 'Wait this long at the edge before the shelf slides open') : t('behaviour.disabledHoverOff'),
+              desc: settings.gameMode ? preferences.gameStatus : hoverOn ? (t('behaviour.hoverDelayDesc') || 'Wait this long at the edge before the shelf slides open') : t('behaviour.disabledHoverOff'),
               disabled: !hoverOn,
               trailing: <span className="set-row-badge">{formatHoverDelay(hoverDelay)}</span>,
               below: renderHoverDelayControl(),
@@ -1367,6 +1376,11 @@ export function Settings({
         ]
       } satisfies GroupSpec] : []),
       {
+        id: 'interface-font',
+        label: preferences.fontTitle,
+        rows: [{ id: 'font-family', title: preferences.fontTitle, desc: preferences.fontDesc, below: <FontPicker /> }]
+      },
+      {
         id: 'audio',
         label: t('appearance.audioAndFeedback') || 'AUDIO FEEDBACK',
         rows: [
@@ -1556,11 +1570,13 @@ function SettingGroup({ group, layout }: { group: GroupSpec; layout: 'v' | 'h' }
 function Toggle({
   checked,
   onChange,
-  disabled
+  disabled,
+  label
 }: {
   checked: boolean
   onChange: (v: boolean) => void
   disabled?: boolean
+  label?: string
 }) {
   const [isHovered, setIsHovered] = useState(false)
 
@@ -1569,6 +1585,7 @@ function Toggle({
       type="button"
       className={`setting-toggle${checked ? ' checked' : ''}`}
       role="switch"
+      aria-label={label}
       aria-checked={checked}
       disabled={disabled}
       onMouseEnter={() => setIsHovered(true)}

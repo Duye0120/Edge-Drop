@@ -13,6 +13,7 @@ import { Panel } from './components/Panel'
 import { useStore } from './store/appStore'
 import { edge } from './lib/edge'
 import { applyReduceMotion } from './lib/theme'
+import { uiFontStack } from '../shared/preferences'
 import { useEdgeHover } from './hooks/useEdgeHover'
 import { useHoverResync } from './hooks/useHoverResync'
 
@@ -295,7 +296,16 @@ export default function App() {
     applyReduceMotion(settings.reduceMotion)
     const scale = settings.fontSizeScale ?? 1.0
     document.documentElement.style.setProperty('--font-scale', String(scale))
-  }, [settings.reduceMotion, settings.fontSizeScale])
+    document.documentElement.style.setProperty('--font-ui', uiFontStack(settings.uiFontFamily))
+  }, [settings.reduceMotion, settings.fontSizeScale, settings.uiFontFamily])
+
+  useEffect(() => {
+    if (!settings.gameMode) return
+    const state = useStore.getState()
+    state.setOpen(false)
+    useStore.setState({ externalDrag: false, copyFlareActive: false, edgeHintActive: false })
+    void edge.setInteractive(false)
+  }, [settings.gameMode])
 
   if (!hydrated) {
     return <div className="root" />

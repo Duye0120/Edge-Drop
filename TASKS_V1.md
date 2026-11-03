@@ -8,7 +8,16 @@ Open the edge panel and select **Tasks & notes / 待办与备忘**. Clipboard ca
 - Use All, Today, Upcoming or Archive, and search within that view. Due and completed groups can be expanded. Untimed cards remain until archived.
 - Complete/reopen tasks, pin cards, archive/restore them, or undo the latest completion/archive action. An archived card retains its completion state.
 - Save explicitly, or press Ctrl/Cmd+Enter in the text field. Escape cancels the editor. Switching to Clipboard or Settings retains the in-memory draft. Save errors retain the draft. Concurrent edits require choosing the draft or saved version before retrying.
-- The new UI supports Chinese and English; other application languages use English for these controls.
+- The new UI supports simplified Chinese, traditional Chinese and English; other application languages use English for these controls. Card dates follow the selected application language. Enter an optional local time as `2026-11-06 15:30`, or use the native picker shortcut. The operating system controls the language of the native picker popup.
+- The panel follows the existing dark shelf design with shared tabs, search, card surfaces and action pills. Text follows the app's font-size setting. The app does not currently offer a separate light panel theme; Windows light/dark taskbar icon behavior remains unchanged.
+
+## Game mode and fonts
+
+Turn on **Game mode / 游戏模式** in Settings → Behaviour or the tray menu before playing. It hides the closed edge bar and copy hints, blocks hover and external-drag activation, and suppresses automatic location confirmations and welcome-tour popups. Turning it on closes the panel. The setting persists until you turn it off, including across restarts. Clipboard capture continues according to your existing incognito and retention settings.
+
+Your configured toggle shortcut (Alt+C by default) and the tray still open/close the panel deliberately, including while game mode is on. Use either to reach the switch and turn game mode off. Game mode preserves your hover and fullscreen-protection choices. The existing Windows fullscreen detector remains available; it is not reliable detection of every game or borderless window. Use the manual switch when automatic detection does not cover your game.
+
+Settings → Appearance → **Interface font / 界面字体** lists installed system families and accepts a local family name. The setting and a mixed-script preview apply to the interface; code keeps its monospace font. A missing family or glyph uses the bundled/default Windows fonts. Reset restores the default font. Family names are stored locally as a single escaped CSS string; no font files are imported or downloaded. Restart the app to refresh the installed-font list after installing fonts. The top dock provides the same font controls in a scrollable settings card.
 
 Storage, backup recovery, retained archive data, limits and disabled application updates are described in [PRIVACY.md](PRIVACY.md). A user with an older `updateMode=auto` profile cannot reactivate the upstream updater. The Store identity and signing configuration are inherited development metadata and are not authorization to distribute a Store package.
 

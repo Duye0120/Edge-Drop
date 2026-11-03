@@ -8,6 +8,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { DEFAULT_SETTINGS, isUpdateMode, normalizeHoverOpenDelay, type Settings } from '../../shared/types'
 import { PATHS } from './paths'
+import { normalizeFontFamily } from '../../shared/preferences'
 
 let cache: Settings | null = null
 
@@ -19,6 +20,8 @@ function merge(base: Settings, patch: Partial<Settings>): Settings {
   out.autoDeleteHours = Math.max(0, Number(out.autoDeleteHours) || 0)
   out.verticalOffset = Math.min(1.0, Math.max(0.0, typeof out.verticalOffset === 'number' ? out.verticalOffset : 0.5))
   out.hoverOpenDelay = normalizeHoverOpenDelay(out.hoverOpenDelay)
+  out.gameMode = out.gameMode === true
+  out.uiFontFamily = normalizeFontFamily(out.uiFontFamily)
   if (out.uiStyle !== 'modern' && out.uiStyle !== 'compact') {
     out.uiStyle = 'modern'
   }
