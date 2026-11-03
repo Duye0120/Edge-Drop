@@ -214,7 +214,7 @@
     "display": "Schermo",
     "quit": "Esci da Edge-Drop",
     "welcomeTitle": "Scaffale appunti Edge-Drop",
-    "welcomeBody": "Passa il mouse al centro del bordo sinistro dello schermo, o premi Alt+C per aprire lo scaffale."
+    "welcomeBody": "Passa il mouse al centro del bordo sinistro dello schermo, o premi Alt+Shift+C per aprire lo scaffale."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Stile indicatore di copia",

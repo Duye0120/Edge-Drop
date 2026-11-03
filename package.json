@@ -1,7 +1,7 @@
 {
-  "name": "edge-drop",
-  "version": "0.4.0",
-  "description": "Edge-Drop — a clipboard manager that lives on the left edge of your screen and expands on hover.",
+  "name": "edge-drop-tasks-preview",
+  "version": "0.4.0-tasks.1",
+  "description": "Edge-Drop Tasks Preview — test build with tasks, notes, game mode and local UI fonts.",
   "author": "Edge-Drop",
   "license": "Apache-2.0",
   "private": true,
@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
-    "build:github": "npm run build && electron-builder --win nsis -c.extraMetadata.buildTarget=github",
+    "build:github": "npm run build && electron-builder --config electron-builder.preview.cjs --win nsis zip --x64 --publish never -c.extraMetadata.buildTarget=github",
     "build:store": "npm run build && electron-builder --win appx -c.extraMetadata.buildTarget=store",
     "build:msix": "npm run build && electron-builder --win appx -c.extraMetadata.buildTarget=store",
     "build:win": "npm run build:github",
@@ -23,8 +23,8 @@
     "postinstall": "install-electron"
   },
   "build": {
-    "appId": "com.edgedrop.app",
-    "productName": "Edge-Drop",
+    "appId": "com.duye0120.edgedrop.tasks.preview",
+    "productName": "Edge-Drop Tasks Preview",
     "directories": {
       "output": "dist",
       "buildResources": "resources"

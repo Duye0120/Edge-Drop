@@ -214,7 +214,7 @@
     "display": "Képernyő",
     "quit": "Kilépés az Edge-Drop-ból",
     "welcomeTitle": "Edge-Drop vágólap-polc",
-    "welcomeBody": "Húzza az egeret a képernyő bal-középső széle mentén, vagy nyomja meg az Alt+C billentyűt a polc kinyitásához."
+    "welcomeBody": "Húzza az egeret a képernyő bal-középső széle mentén, vagy nyomja meg az Alt+Shift+C billentyűt a polc kinyitásához."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Másolásjelző stílusa",

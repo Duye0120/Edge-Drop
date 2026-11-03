@@ -214,7 +214,7 @@
     "display": "Màn hình",
     "quit": "Thoát Edge-Drop",
     "welcomeTitle": "Giá Bảng tạm Edge-Drop",
-    "welcomeBody": "Di chuột vào giữa mép trái màn hình hoặc nhấn Alt+C để mở giá."
+    "welcomeBody": "Di chuột vào giữa mép trái màn hình hoặc nhấn Alt+Shift+C để mở giá."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Kiểu Chỉ báo Sao chép",

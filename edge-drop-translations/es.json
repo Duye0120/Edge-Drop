@@ -214,7 +214,7 @@
     "display": "Pantalla",
     "quit": "Salir de Edge-Drop",
     "welcomeTitle": "Panel de portapapeles Edge-Drop",
-    "welcomeBody": "Pasa el cursor por el centro del borde izquierdo de la pantalla o pulsa Alt+C para deslizar y abrir tu panel."
+    "welcomeBody": "Pasa el cursor por el centro del borde izquierdo de la pantalla o pulsa Alt+Shift+C para deslizar y abrir tu panel."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Estilo del indicador de copia",

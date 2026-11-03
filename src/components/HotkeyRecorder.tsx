@@ -1,3 +1,4 @@
+import { APP_IDENTITY } from '../../shared/identity'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { playToggleSound, playButtonClickSound } from '../lib/soundEffects'
 import { RotateCcwIcon, CloseIcon } from './icons'
@@ -90,9 +91,9 @@ export function HotkeyRecorder({ hotkey, onChange }: HotkeyRecorderProps) {
   const [pressedBadges, setPressedBadges] = useState<string[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const activeHotkey = hotkey || 'Alt+C'
+  const activeHotkey = hotkey || APP_IDENTITY.defaultHotkey
   const displayBadges = parseKeyBadges(activeHotkey)
-  const isDefault = activeHotkey === 'Alt+C'
+  const isDefault = activeHotkey === APP_IDENTITY.defaultHotkey
 
   const stopRecording = useCallback((canceled = false) => {
     setIsRecording(false)
@@ -183,12 +184,12 @@ export function HotkeyRecorder({ hotkey, onChange }: HotkeyRecorderProps) {
     e.stopPropagation()
     playButtonClickSound()
     stopRecording(false)
-    onChange('Alt+C')
+    onChange(APP_IDENTITY.defaultHotkey)
   }
 
   const recordingHint = t('behaviour.hotkeyRecording') || 'Press key combination...'
   const cancelTitle = `${t('behaviour.hotkeyCancel') || 'Cancel'} (Esc)`
-  const resetTitle = t('behaviour.hotkeyReset', { shortcut: 'Alt+C' }) || 'Reset to default (Alt+C)'
+  const resetTitle = t('behaviour.hotkeyReset', { shortcut: APP_IDENTITY.defaultHotkey }) || 'Reset to default (Alt+Shift+C)'
   const editLabel = t('behaviour.hotkeyEdit') || 'Edit'
 
   return (

@@ -386,7 +386,7 @@ npm run dev          # Electron + Vite with hot reload
 | `npm run dev` | Run the app in development mode |
 | `npm run typecheck` | Type-check the main and renderer code |
 | `npm test` | Run the test suite (Vitest) |
-| `npm run build:github` | Build the NSIS installer (`dist/Edge-Drop-Setup-<version>.exe`) |
+| `npm run build:github` | Build the isolated Windows x64 Tasks Preview NSIS installer and ZIP (`dist/Edge-Drop-Tasks-Preview-*`) |
 | `npm run build:store` | Build the Microsoft Store package (`.appx`) |
 
 > [!NOTE]

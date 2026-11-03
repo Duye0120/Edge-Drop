@@ -214,7 +214,7 @@
     "display": "الشاشة",
     "quit": "إنهاء Edge-Drop",
     "welcomeTitle": "رف حافظة Edge-Drop",
-    "welcomeBody": "حوّم مقابل منتصف الحافة اليسرى للشاشة، أو اضغط Alt+C لفتح رفك."
+    "welcomeBody": "حوّم مقابل منتصف الحافة اليسرى للشاشة، أو اضغط Alt+Shift+C لفتح رفك."
   },
   "flyout": {
     "copyBeaconStyleTitle": "نمط مؤشر النسخ",

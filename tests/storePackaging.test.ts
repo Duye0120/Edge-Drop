@@ -179,7 +179,7 @@ describe('GitHub vs Store packaging contracts (on-disk, not assumed)', () => {
 
   it('main process only sets the custom AUMID on the GitHub build', () => {
     const src = read('electron/main/index.ts')
-    expect(src).toMatch(/if\s*\(\s*!isStoreBuild\(\)\s*\)\s*\{[\s\S]*setAppUserModelId\('com\.edgedrop\.app'\)/)
+    expect(src).toMatch(/if\s*\(\s*!isStoreBuild\(\)\s*\)\s*\{[\s\S]*setAppUserModelId\(APP_IDENTITY\.appId\)/)
     expect(src).not.toMatch(/setAppUserModelId\([\s\S]*isStoreBuild\(\)/)
   })
 

@@ -25,3 +25,6 @@ scratch/verify-*.cjs
 new icons/
 Blue_gradient (1).png
 
+
+# Verified Windows preview artifacts
+release-assets/

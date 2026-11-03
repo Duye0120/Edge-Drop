@@ -214,7 +214,7 @@
     "display": "Layar",
     "quit": "Keluar dari Edge-Drop",
     "welcomeTitle": "Rak Papan Klip Edge-Drop",
-    "welcomeBody": "Hover di tepi tengah-kiri layar, atau tekan Alt+C untuk membuka rak Anda."
+    "welcomeBody": "Hover di tepi tengah-kiri layar, atau tekan Alt+Shift+C untuk membuka rak Anda."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Gaya Indikator Salin",

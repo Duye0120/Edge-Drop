@@ -15,7 +15,7 @@ Open the edge panel and select **Tasks & notes / 待办与备忘**. Clipboard ca
 
 Turn on **Game mode / 游戏模式** in Settings → Behaviour or the tray menu before playing. It hides the closed edge bar and copy hints, blocks hover and external-drag activation, and suppresses automatic location confirmations and welcome-tour popups. Turning it on closes the panel. The setting persists until you turn it off, including across restarts. Clipboard capture continues according to your existing incognito and retention settings.
 
-Your configured toggle shortcut (Alt+C by default) and the tray still open/close the panel deliberately, including while game mode is on. Use either to reach the switch and turn game mode off. Game mode preserves your hover and fullscreen-protection choices. The existing Windows fullscreen detector remains available; it is not reliable detection of every game or borderless window. Use the manual switch when automatic detection does not cover your game.
+Your configured toggle shortcut (Alt+Shift+C by default) and the tray still open/close the panel deliberately, including while game mode is on. Use either to reach the switch and turn game mode off. Game mode preserves your hover and fullscreen-protection choices. The existing Windows fullscreen detector remains available; it is not reliable detection of every game or borderless window. Use the manual switch when automatic detection does not cover your game.
 
 Settings → Appearance → **Interface font / 界面字体** lists installed system families and accepts a local family name. The setting and a mixed-script preview apply to the interface; code keeps its monospace font. A missing family or glyph uses the bundled/default Windows fonts. Reset restores the default font. Family names are stored locally as a single escaped CSS string; no font files are imported or downloaded. Restart the app to refresh the installed-font list after installing fonts. The top dock provides the same font controls in a scrollable settings card.
 
@@ -28,3 +28,9 @@ Use Node.js 24 and `npm ci`, then `npm run typecheck`, `npm test`, and `npm run 
 On a managed cloud executor, npm and Electron caches may need writable paths. Use the executor's existing proxy and CA settings; Node's Electron downloader may require `NODE_USE_ENV_PROXY=1`.
 
 Cloud Chromium interaction checks use a simulated preload bridge. They exercise the actual React interface but do not prove Windows DPAPI, NOACTIVATE focus handoff, native date-picker placement, global hotkeys, screen-edge detection, multi-monitor geometry, native clipboard formats, drag and drop, startup, or installer behavior. Those need a Windows desktop smoke test before distribution.
+
+## Windows preview packaging
+
+This fork uses the independent Edge-Drop Tasks Preview identity and `%APPDATA%/edge-drop-tasks-preview` profile. Existing upstream clipboard and board data are neither migrated nor modified. Install the NSIS package separately or extract the ZIP to a new directory. In-app updates remain disabled, and the package contains no update feed.
+
+Branch pushes run Windows packaging and verification without publishing. A reviewed `v*-tasks.*` tag builds an x64 installer and ZIP, runs the packaged native-module/profile self-check, and publishes a GitHub prerelease with provenance and SHA-256 checksums. The release is not marked Latest. See `RELEASE_NOTES_PREVIEW.md` for the user-facing validation limits. The automated check does not run the normal Windows desktop, installer, uninstaller, or a real game.

@@ -214,7 +214,7 @@
     "display": "Ekran",
     "quit": "Zakończ Edge-Drop",
     "welcomeTitle": "Półka schowka Edge-Drop",
-    "welcomeBody": "Najedź na środek lewej krawędzi ekranu lub naciśnij Alt+C, aby wysunąć półkę."
+    "welcomeBody": "Najedź na środek lewej krawędzi ekranu lub naciśnij Alt+Shift+C, aby wysunąć półkę."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Styl wskaźnika kopiowania",

@@ -214,7 +214,7 @@
     "display": "디스플레이",
     "quit": "Edge-Drop 종료",
     "welcomeTitle": "Edge-Drop 클립보드 선반",
-    "welcomeBody": "화면 왼쪽 가장자리 중앙에 호버하거나 Alt+C를 눌러 선반을 여세요."
+    "welcomeBody": "화면 왼쪽 가장자리 중앙에 호버하거나 Alt+Shift+C를 눌러 선반을 여세요."
   },
   "flyout": {
     "copyBeaconStyleTitle": "복사 표시기 스타일",

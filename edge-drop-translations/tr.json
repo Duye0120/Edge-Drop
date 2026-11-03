@@ -214,7 +214,7 @@
     "display": "Ekran",
     "quit": "Edge-Drop'tan Çık",
     "welcomeTitle": "Edge-Drop Pano Rafı",
-    "welcomeBody": "Ekranın sol-orta kenarına gelin veya rafınızı açmak için Alt+C tuşlarına basın."
+    "welcomeBody": "Ekranın sol-orta kenarına gelin veya rafınızı açmak için Alt+Shift+C tuşlarına basın."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Kopya Göstergesi Stili",

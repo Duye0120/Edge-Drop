@@ -1,3 +1,5 @@
+import { APP_IDENTITY } from './identity'
+
 /**
  * Shared domain types used by both the Electron main process and the renderer.
  *
@@ -242,7 +244,7 @@ export interface Settings {
   movePastedToTop?: boolean
   /** One-time flag tracking if the v0.2.6 upgrade unpinned history cleanup has run. */
   v026UpgradeCleaned?: boolean
-  /** Configurable global hotkey accelerator to toggle Edge-Drop shelf (e.g. 'Alt+C', 'Alt+Shift+C'). Default: 'Alt+C'. */
+  /** Configurable global hotkey accelerator to toggle Edge-Drop shelf (e.g. 'Alt+C', 'Alt+Shift+C'). Default: 'Alt+Shift+C'. */
   toggleHotkey?: string
 }
 
@@ -282,7 +284,7 @@ export const DEFAULT_SETTINGS: Settings = {
   updateMode: 'auto',
   skippedUpdateVersion: undefined,
   language: 'system',
-  toggleHotkey: 'Alt+C'
+  toggleHotkey: APP_IDENTITY.defaultHotkey
 }
 
 

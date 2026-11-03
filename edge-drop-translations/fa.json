@@ -214,7 +214,7 @@
     "display": "نمایشگر",
     "quit": "بستن کامل Edge-Drop",
     "welcomeTitle": "قفسه کلیپ‌بورد Edge-Drop",
-    "welcomeBody": "ماوس رو نزدیک وسط لبه چپ نگه دار یا Alt+C رو بزن تا قفسه باز بشه."
+    "welcomeBody": "ماوس رو نزدیک وسط لبه چپ نگه دار یا Alt+Shift+C رو بزن تا قفسه باز بشه."
   },
   "flyout": {
     "copyBeaconStyleTitle": "مدل نشانگر کپی",

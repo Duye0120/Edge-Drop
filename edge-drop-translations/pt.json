@@ -214,7 +214,7 @@
     "display": "Tela",
     "quit": "Sair do Edge-Drop",
     "welcomeTitle": "Prateleira de Área de Transferência Edge-Drop",
-    "welcomeBody": "Passe o mouse contra o centro da borda esquerda da tela, ou pressione Alt+C para abrir sua prateleira."
+    "welcomeBody": "Passe o mouse contra o centro da borda esquerda da tela, ou pressione Alt+Shift+C para abrir sua prateleira."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Estilo do indicador de cópia",

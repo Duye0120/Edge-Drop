@@ -1099,7 +1099,7 @@ export const en: TranslationKeys = {
     "display": "Display",
     "quit": "Quit Edge-Drop",
     "welcomeTitle": "Edge-Drop Clipboard Shelf",
-    "welcomeBody": "Hover against the middle-left screen edge, or press Alt+C to slide open your shelf."
+    "welcomeBody": "Hover against the middle-left screen edge, or press Alt+Shift+C to slide open your shelf."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Copy Indicator Style",
@@ -1719,7 +1719,7 @@ export const es: TranslationKeys = {
     "display": "Pantalla",
     "quit": "Salir de Edge-Drop",
     "welcomeTitle": "Panel de portapapeles Edge-Drop",
-    "welcomeBody": "Pasa el cursor por el centro del borde izquierdo de la pantalla o pulsa Alt+C para deslizar y abrir tu panel."
+    "welcomeBody": "Pasa el cursor por el centro del borde izquierdo de la pantalla o pulsa Alt+Shift+C para deslizar y abrir tu panel."
   },
   "flyout": {
     "clickToDeselect": "Haz clic para deseleccionar",
@@ -2347,7 +2347,7 @@ export const fr: TranslationKeys = {
     "display": "Écran",
     "quit": "Quitter Edge-Drop",
     "welcomeTitle": "Étagère de presse-papiers Edge-Drop",
-    "welcomeBody": "Survolez le milieu du bord gauche de l'écran, ou appuyez sur Alt+C pour ouvrir votre étagère."
+    "welcomeBody": "Survolez le milieu du bord gauche de l'écran, ou appuyez sur Alt+Shift+C pour ouvrir votre étagère."
   },
   "flyout": {
     "clickToDeselect": "Cliquer pour désélectionner",
@@ -2975,7 +2975,7 @@ export const de: TranslationKeys = {
     "display": "Anzeige",
     "quit": "Edge-Drop beenden",
     "welcomeTitle": "Edge-Drop Zwischenablage-Ablage",
-    "welcomeBody": "Fahren Sie mit der Maus an die mittlere linke Bildschirmkante, oder drücken Sie Alt+C, um Ihre Ablage zu öffnen."
+    "welcomeBody": "Fahren Sie mit der Maus an die mittlere linke Bildschirmkante, oder drücken Sie Alt+Shift+C, um Ihre Ablage zu öffnen."
   },
   "flyout": {
     "clickToDeselect": "Zum Aufheben der Auswahl klicken",
@@ -3595,7 +3595,7 @@ export const it: TranslationKeys = {
     "display": "Schermo",
     "quit": "Esci da Edge-Drop",
     "welcomeTitle": "Scaffale appunti Edge-Drop",
-    "welcomeBody": "Passa il mouse al centro del bordo sinistro dello schermo, o premi Alt+C per aprire lo scaffale."
+    "welcomeBody": "Passa il mouse al centro del bordo sinistro dello schermo, o premi Alt+Shift+C per aprire lo scaffale."
   },
   "flyout": {
     "clickToDeselect": "Fai clic per deselezionare",
@@ -4223,7 +4223,7 @@ export const pt: TranslationKeys = {
     "display": "Tela",
     "quit": "Sair do Edge-Drop",
     "welcomeTitle": "Prateleira de Área de Transferência Edge-Drop",
-    "welcomeBody": "Passe o mouse contra o centro da borda esquerda da tela, ou pressione Alt+C para abrir sua prateleira."
+    "welcomeBody": "Passe o mouse contra o centro da borda esquerda da tela, ou pressione Alt+Shift+C para abrir sua prateleira."
   },
   "flyout": {
     "clickToDeselect": "Clique para desmarcar",
@@ -4851,7 +4851,7 @@ export const ru: TranslationKeys = {
     "display": "Экран",
     "quit": "Выйти из Edge-Drop",
     "welcomeTitle": "Полка буфера обмена Edge-Drop",
-    "welcomeBody": "Наведите курсор на середину левого края экрана или нажмите Alt+C, чтобы открыть полку."
+    "welcomeBody": "Наведите курсор на середину левого края экрана или нажмите Alt+Shift+C, чтобы открыть полку."
   },
   "flyout": {
     "clickToDeselect": "Нажмите, чтобы снять выбор",
@@ -6099,7 +6099,7 @@ export const ko: TranslationKeys = {
     "display": "디스플레이",
     "quit": "Edge-Drop 종료",
     "welcomeTitle": "Edge-Drop 클립보드 선반",
-    "welcomeBody": "화면 왼쪽 가장자리 중앙에 호버하거나 Alt+C를 눌러 선반을 여세요."
+    "welcomeBody": "화면 왼쪽 가장자리 중앙에 호버하거나 Alt+Shift+C를 눌러 선반을 여세요."
   },
   "flyout": {
     "clickToDeselect": "클릭하여 선택 해제",
@@ -6711,7 +6711,7 @@ export const zhCN: TranslationKeys = {
     "display": "显示器",
     "quit": "退出 Edge-Drop",
     "welcomeTitle": "Edge-Drop 剪贴板搁架",
-    "welcomeBody": "将鼠标悬停在屏幕左中边缘，或按 Alt+C 滑出打开您的搁架。"
+    "welcomeBody": "将鼠标悬停在屏幕左中边缘，或按 Alt+Shift+C 滑出打开您的搁架。"
   },
   "flyout": {
     "clickToDeselect": "点击取消选择",
@@ -7323,7 +7323,7 @@ export const zhTW: TranslationKeys = {
     "display": "顯示器",
     "quit": "結束 Edge-Drop",
     "welcomeTitle": "Edge-Drop 剪貼簿層架",
-    "welcomeBody": "將滑鼠懸停在螢幕左中邊緣，或按 Alt+C 滑出開啟您的層架。"
+    "welcomeBody": "將滑鼠懸停在螢幕左中邊緣，或按 Alt+Shift+C 滑出開啟您的層架。"
   },
   "flyout": {
     "clickToDeselect": "點擊以取消選取",
@@ -7935,7 +7935,7 @@ export const hi: TranslationKeys = {
     "display": "डिस्प्ले",
     "quit": "Edge-Drop से बाहर",
     "welcomeTitle": "Edge-Drop क्लिपबोर्ड शेल्फ़",
-    "welcomeBody": "मध्य-बाएँ स्क्रीन किनारे के साथ होवर करें, या अपनी शेल्फ़ खोलने के लिए Alt+C दबाएँ।"
+    "welcomeBody": "मध्य-बाएँ स्क्रीन किनारे के साथ होवर करें, या अपनी शेल्फ़ खोलने के लिए Alt+Shift+C दबाएँ।"
   },
   "flyout": {
     "clickToDeselect": "चयन हटाने के लिए क्लिक करें",
@@ -8555,7 +8555,7 @@ export const ar: TranslationKeys = {
     "display": "الشاشة",
     "quit": "إنهاء Edge-Drop",
     "welcomeTitle": "رف حافظة Edge-Drop",
-    "welcomeBody": "حوّم مقابل منتصف الحافة اليسرى للشاشة، أو اضغط Alt+C لفتح رفك."
+    "welcomeBody": "حوّم مقابل منتصف الحافة اليسرى للشاشة، أو اضغط Alt+Shift+C لفتح رفك."
   },
   "flyout": {
     "clickToDeselect": "انقر لإلغاء التحديد",
@@ -9207,7 +9207,7 @@ export const fa: TranslationKeys = {
     "display": "نمایشگر",
     "quit": "بستن کامل Edge-Drop",
     "welcomeTitle": "قفسه کلیپ‌بورد Edge-Drop",
-    "welcomeBody": "ماوس رو نزدیک وسط لبه چپ نگه دار یا Alt+C رو بزن تا قفسه باز بشه."
+    "welcomeBody": "ماوس رو نزدیک وسط لبه چپ نگه دار یا Alt+Shift+C رو بزن تا قفسه باز بشه."
   },
   "flyout": {
     "clickToDeselect": "برای لغو انتخاب کلیک کنید",
@@ -9827,7 +9827,7 @@ export const bn: TranslationKeys = {
     "display": "প্রদর্শন",
     "quit": "Edge-Drop থেকে প্রস্থান",
     "welcomeTitle": "Edge-Drop ক্লিপবোর্ড শেলফ",
-    "welcomeBody": "মাঝ-বাম স্ক্রিন প্রান্তে হোভার করুন, বা আপনার শেলফ খুলতে Alt+C চাপুন।"
+    "welcomeBody": "মাঝ-বাম স্ক্রিন প্রান্তে হোভার করুন, বা আপনার শেলফ খুলতে Alt+Shift+C চাপুন।"
   },
   "flyout": {
     "clickToDeselect": "নির্বাচন বাতিল করতে ক্লিক করুন",
@@ -10447,7 +10447,7 @@ export const tr: TranslationKeys = {
     "display": "Ekran",
     "quit": "Edge-Drop'tan Çık",
     "welcomeTitle": "Edge-Drop Pano Rafı",
-    "welcomeBody": "Ekranın sol-orta kenarına gelin veya rafınızı açmak için Alt+C tuşlarına basın."
+    "welcomeBody": "Ekranın sol-orta kenarına gelin veya rafınızı açmak için Alt+Shift+C tuşlarına basın."
   },
   "flyout": {
     "clickToDeselect": "Seçimi kaldırmak için tıklayın",
@@ -11067,7 +11067,7 @@ export const vi: TranslationKeys = {
     "display": "Màn hình",
     "quit": "Thoát Edge-Drop",
     "welcomeTitle": "Giá Bảng tạm Edge-Drop",
-    "welcomeBody": "Di chuột vào giữa mép trái màn hình hoặc nhấn Alt+C để mở giá."
+    "welcomeBody": "Di chuột vào giữa mép trái màn hình hoặc nhấn Alt+Shift+C để mở giá."
   },
   "flyout": {
     "clickToDeselect": "Nhấp để bỏ chọn",
@@ -11679,7 +11679,7 @@ export const pl: TranslationKeys = {
     "display": "Ekran",
     "quit": "Zakończ Edge-Drop",
     "welcomeTitle": "Półka schowka Edge-Drop",
-    "welcomeBody": "Najedź na środek lewej krawędzi ekranu lub naciśnij Alt+C, aby wysunąć półkę."
+    "welcomeBody": "Najedź na środek lewej krawędzi ekranu lub naciśnij Alt+Shift+C, aby wysunąć półkę."
   },
   "flyout": {
     "clickToDeselect": "Kliknij, aby odznaczyć",
@@ -12315,7 +12315,7 @@ export const nl: TranslationKeys = {
     "display": "Weergave",
     "quit": "Edge-Drop afsluiten",
     "welcomeTitle": "Edge-Drop klembordplank",
-    "welcomeBody": "Beweeg tegen het midden van de linkerschermrand of druk op Alt+C om je plank te openen."
+    "welcomeBody": "Beweeg tegen het midden van de linkerschermrand of druk op Alt+Shift+C om je plank te openen."
   },
   "flyout": {
     "clickToDeselect": "Klik om selectie op te heffen",
@@ -12935,7 +12935,7 @@ export const sv: TranslationKeys = {
     "display": "Skärm",
     "quit": "Avsluta Edge-Drop",
     "welcomeTitle": "Edge-Drop urklippshylla",
-    "welcomeBody": "Sväv mot mitten av den vänstra skärmkanten eller tryck Alt+C för att skjuta ut din hylla."
+    "welcomeBody": "Sväv mot mitten av den vänstra skärmkanten eller tryck Alt+Shift+C för att skjuta ut din hylla."
   },
   "flyout": {
     "clickToDeselect": "Klicka för att avmarkera",
@@ -13555,7 +13555,7 @@ export const id: TranslationKeys = {
     "display": "Layar",
     "quit": "Keluar dari Edge-Drop",
     "welcomeTitle": "Rak Papan Klip Edge-Drop",
-    "welcomeBody": "Hover di tepi tengah-kiri layar, atau tekan Alt+C untuk membuka rak Anda."
+    "welcomeBody": "Hover di tepi tengah-kiri layar, atau tekan Alt+Shift+C untuk membuka rak Anda."
   },
   "flyout": {
     "clickToDeselect": "Klik untuk membatalkan pilihan",
@@ -14167,7 +14167,7 @@ export const uk: TranslationKeys = {
     "display": "Екран",
     "quit": "Вийти з Edge-Drop",
     "welcomeTitle": "Полиця буфера обміну Edge-Drop",
-    "welcomeBody": "Наведіть курсор на середину лівого краю екрана або натисніть Alt+C, щоб відкрити полицю."
+    "welcomeBody": "Наведіть курсор на середину лівого краю екрана або натисніть Alt+Shift+C, щоб відкрити полицю."
   },
   "flyout": {
     "clickToDeselect": "Натисніть, щоб скасувати вибір",
@@ -14803,7 +14803,7 @@ export const el: TranslationKeys = {
     "display": "Οθόνη",
     "quit": "Έξοδος από το Edge-Drop",
     "welcomeTitle": "Ράφι Προχείρου Edge-Drop",
-    "welcomeBody": "Φέρτε τον δείκτη στη μέση της αριστερής άκρης της οθόνης ή πατήστε Alt+C για να ανοίξετε το ράφι σας."
+    "welcomeBody": "Φέρτε τον δείκτη στη μέση της αριστερής άκρης της οθόνης ή πατήστε Alt+Shift+C για να ανοίξετε το ράφι σας."
   },
   "flyout": {
     "clickToDeselect": "Κάντε κλικ για αποεπιλογή",
@@ -15423,7 +15423,7 @@ export const cs: TranslationKeys = {
     "display": "Obrazovka",
     "quit": "Ukončit Edge-Drop",
     "welcomeTitle": "Police schránky Edge-Drop",
-    "welcomeBody": "Najeďte na střed levého okraje obrazovky nebo stiskněte Alt+C pro vysunutí vaší police."
+    "welcomeBody": "Najeďte na střed levého okraje obrazovky nebo stiskněte Alt+Shift+C pro vysunutí vaší police."
   },
   "flyout": {
     "clickToDeselect": "Kliknutím zrušíte výběr",
@@ -16059,7 +16059,7 @@ export const ro: TranslationKeys = {
     "display": "Ecran",
     "quit": "Ieșire din Edge-Drop",
     "welcomeTitle": "Raft clipboard Edge-Drop",
-    "welcomeBody": "Survolează marginea stângă-centrală a ecranului sau apasă Alt+C pentru a-ți glisa raftul."
+    "welcomeBody": "Survolează marginea stângă-centrală a ecranului sau apasă Alt+Shift+C pentru a-ți glisa raftul."
   },
   "flyout": {
     "clickToDeselect": "Clic pentru deselectare",
@@ -16687,7 +16687,7 @@ export const hu: TranslationKeys = {
     "display": "Képernyő",
     "quit": "Kilépés az Edge-Drop-ból",
     "welcomeTitle": "Edge-Drop vágólap-polc",
-    "welcomeBody": "Húzza az egeret a képernyő bal-középső széle mentén, vagy nyomja meg az Alt+C billentyűt a polc kinyitásához."
+    "welcomeBody": "Húzza az egeret a képernyő bal-középső széle mentén, vagy nyomja meg az Alt+Shift+C billentyűt a polc kinyitásához."
   },
   "flyout": {
     "clickToDeselect": "Kattintson a kijelölés megszüntetéséhez",
@@ -17307,7 +17307,7 @@ export const da: TranslationKeys = {
     "display": "Skærm",
     "quit": "Afslut Edge-Drop",
     "welcomeTitle": "Edge-Drop Udklipsholder-hylde",
-    "welcomeBody": "Svæv mod midten af venstre skærmkant, eller tryk Alt+C for at åbne din hylde."
+    "welcomeBody": "Svæv mod midten af venstre skærmkant, eller tryk Alt+Shift+C for at åbne din hylde."
   },
   "flyout": {
     "clickToDeselect": "Klik for at fravælge",
@@ -17927,7 +17927,7 @@ export const fi: TranslationKeys = {
     "display": "Näyttö",
     "quit": "Lopeta Edge-Drop",
     "welcomeTitle": "Edge-Drop leikepöytähylly",
-    "welcomeBody": "Vie osoitin näytön vasemman reunan keskikohtaan tai paina Alt+C avataksesi hyllyn."
+    "welcomeBody": "Vie osoitin näytön vasemman reunan keskikohtaan tai paina Alt+Shift+C avataksesi hyllyn."
   },
   "flyout": {
     "clickToDeselect": "Napsauta poistaaksesi valinnan",
@@ -18547,7 +18547,7 @@ export const th: TranslationKeys = {
     "display": "หน้าจอ",
     "quit": "ออกจาก Edge-Drop",
     "welcomeTitle": "ชั้นวางคลิปบอร์ด Edge-Drop",
-    "welcomeBody": "เลื่อนเมาส์ไปที่กึ่งกลางขอบซ้ายของหน้าจอ หรือกด Alt+C เพื่อเปิดชั้นวางของคุณ"
+    "welcomeBody": "เลื่อนเมาส์ไปที่กึ่งกลางขอบซ้ายของหน้าจอ หรือกด Alt+Shift+C เพื่อเปิดชั้นวางของคุณ"
   },
   "flyout": {
     "clickToDeselect": "คลิกเพื่อยกเลิกการเลือก",
@@ -19159,7 +19159,7 @@ export const he: TranslationKeys = {
     "display": "מסך",
     "quit": "צא מ-Edge-Drop",
     "welcomeTitle": "מדף לוח הגזירים Edge-Drop",
-    "welcomeBody": "רחף מול קצה שמאל-אמצע המסך, או לחץ Alt+C כדי להחליק ולפתוח את המדף שלך."
+    "welcomeBody": "רחף מול קצה שמאל-אמצע המסך, או לחץ Alt+Shift+C כדי להחליק ולפתוח את המדף שלך."
   },
   "flyout": {
     "clickToDeselect": "לחץ כדי לבטל בחירה",
@@ -19787,7 +19787,7 @@ export const no: TranslationKeys = {
     "display": "Skjerm",
     "quit": "Avslutt Edge-Drop",
     "welcomeTitle": "Edge-Drop utklippstavle-hylle",
-    "welcomeBody": "Hold markøren mot midten av venstre skjermkant, eller trykk Alt+C for å skyve ut hyllen din."
+    "welcomeBody": "Hold markøren mot midten av venstre skjermkant, eller trykk Alt+Shift+C for å skyve ut hyllen din."
   },
   "flyout": {
     "clickToDeselect": "Klikk for å fjerne valg",

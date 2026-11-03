@@ -214,7 +214,7 @@
     "display": "Obrazovka",
     "quit": "Ukončit Edge-Drop",
     "welcomeTitle": "Police schránky Edge-Drop",
-    "welcomeBody": "Najeďte na střed levého okraje obrazovky nebo stiskněte Alt+C pro vysunutí vaší police."
+    "welcomeBody": "Najeďte na střed levého okraje obrazovky nebo stiskněte Alt+Shift+C pro vysunutí vaší police."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Styl indikátoru kopírování",

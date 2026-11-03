@@ -214,7 +214,7 @@
     "display": "Skjerm",
     "quit": "Avslutt Edge-Drop",
     "welcomeTitle": "Edge-Drop utklippstavle-hylle",
-    "welcomeBody": "Hold markøren mot midten av venstre skjermkant, eller trykk Alt+C for å skyve ut hyllen din."
+    "welcomeBody": "Hold markøren mot midten av venstre skjermkant, eller trykk Alt+Shift+C for å skyve ut hyllen din."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Stil for kopieringsindikator",

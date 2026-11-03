@@ -14,7 +14,7 @@ The existing image import feature may download an image when you explicitly impo
 
 ## Local storage and retention
 
-Data lives in Electron's per-user `userData` directory, normally `%APPDATA%/edge-drop` on Windows. The exact path can differ between standalone and Store installations.
+Data lives in Electron's per-user `userData` directory, `%APPDATA%/edge-drop-tasks-preview` on Windows for this preview, including a separate `session` directory. The preview does not migrate, clean up, or change upstream's `%APPDATA%/edge-drop` profile. Its application ID, installation, startup item, and default shortcut (Alt+Shift+C) are also separate.
 
 Tasks and notes use a separate `board-v1.json` file, encrypted through Electron `safeStorage` (Windows user-profile encryption on Windows). Saved changes replace the file only after the encrypted temporary file has been flushed. The previous save is retained as `board-v1.json.bak`. If the primary is damaged, a valid backup can be recovered and the unreadable primary is preserved. If neither copy can be read or encryption is unavailable, editing is locked and existing files are left untouched. Access to the original Windows profile may be required for recovery; these files are not a portable export.
 

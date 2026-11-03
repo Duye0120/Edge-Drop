@@ -214,7 +214,7 @@
     "display": "Näyttö",
     "quit": "Lopeta Edge-Drop",
     "welcomeTitle": "Edge-Drop leikepöytähylly",
-    "welcomeBody": "Vie osoitin näytön vasemman reunan keskikohtaan tai paina Alt+C avataksesi hylly."
+    "welcomeBody": "Vie osoitin näytön vasemman reunan keskikohtaan tai paina Alt+Shift+C avataksesi hylly."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Kopiointi-indikaattorin tyyli",

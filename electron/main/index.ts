@@ -22,6 +22,7 @@ import { initState, getWatcher, loadSettings, pushState, stopStateTimers, getSto
 import { initAutoUpdater } from './updater'
 import { createOnboardingWindow } from './onboardingWindow'
 import { onboardingDue } from '../../shared/onboarding'
+import { APP_IDENTITY } from '../../shared/identity'
 import { startFullscreenMonitor, stopFullscreenMonitor, triggerFullscreenCheck } from './fullscreen'
 import { flushStagedTempRegistry } from './stagedTemp'
 import { extname, join, normalize } from 'node:path'
@@ -99,7 +100,7 @@ app.whenReady().then(() => {
   // GitHub NSIS needs an explicit AUMID. Store packages already have one from
   // the AppX identity; overriding it breaks toasts and taskbar grouping.
   if (!isStoreBuild()) {
-    app.setAppUserModelId('com.edgedrop.app')
+    app.setAppUserModelId(APP_IDENTITY.appId)
   }
 
   ensureDirs()
@@ -336,7 +337,7 @@ export function registerGlobalHotkey(targetHotkey?: string): boolean {
     const { globalShortcut } = require('electron')
     globalShortcut.unregisterAll()
     const settings = loadSettings()
-    const hotkey = targetHotkey || settings.toggleHotkey || 'Alt+C'
+    const hotkey = targetHotkey || settings.toggleHotkey || APP_IDENTITY.defaultHotkey
 
     const success = globalShortcut.register(hotkey, () => {
       if (runtime.quitting) return
@@ -346,9 +347,9 @@ export function registerGlobalHotkey(targetHotkey?: string): boolean {
       pushState.togglePanel()
     })
 
-    if (!success && hotkey !== 'Alt+C') {
-      console.warn(`[Main] Failed to register global shortcut ${hotkey}, falling back to Alt+C`)
-      globalShortcut.register('Alt+C', () => {
+    if (!success && hotkey !== APP_IDENTITY.defaultHotkey) {
+      console.warn(`[Main] Failed to register global shortcut ${hotkey}, falling back to ${APP_IDENTITY.defaultHotkey}`)
+      globalShortcut.register(APP_IDENTITY.defaultHotkey, () => {
         if (runtime.quitting) return
         const now = Date.now()
         if (now - _lastHotkeyToggleTime < 500) return

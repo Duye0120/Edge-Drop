@@ -214,7 +214,7 @@
     "display": "מסך",
     "quit": "צא מ-Edge-Drop",
     "welcomeTitle": "מדף לוח הגזירים Edge-Drop",
-    "welcomeBody": "רחף מול קצה שמאל-אמצע המסך, או לחץ Alt+C כדי להחליק ולפתוח את המדף שלך."
+    "welcomeBody": "רחף מול קצה שמאל-אמצע המסך, או לחץ Alt+Shift+C כדי להחליק ולפתוח את המדף שלך."
   },
   "flyout": {
     "copyBeaconStyleTitle": "סגנון מחוון העתקה",

@@ -216,7 +216,7 @@
     "display": "Display",
     "quit": "Quit Edge-Drop",
     "welcomeTitle": "Edge-Drop Clipboard Shelf",
-    "welcomeBody": "Hover against the middle-left screen edge, or press Alt+C to slide open your shelf."
+    "welcomeBody": "Hover against the middle-left screen edge, or press Alt+Shift+C to slide open your shelf."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Copy Indicator Style",

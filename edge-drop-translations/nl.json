@@ -214,7 +214,7 @@
     "display": "Weergave",
     "quit": "Edge-Drop afsluiten",
     "welcomeTitle": "Edge-Drop klembordplank",
-    "welcomeBody": "Beweeg tegen het midden van de linkerschermrand of druk op Alt+C om je plank te openen."
+    "welcomeBody": "Beweeg tegen het midden van de linkerschermrand of druk op Alt+Shift+C om je plank te openen."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Stijl van kopieer-indicator",

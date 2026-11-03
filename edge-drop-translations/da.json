@@ -214,7 +214,7 @@
     "display": "Skærm",
     "quit": "Afslut Edge-Drop",
     "welcomeTitle": "Edge-Drop Udklipsholder-hylde",
-    "welcomeBody": "Svæv mod midten af venstre skærmkant, eller tryk Alt+C for at åbne din hylde."
+    "welcomeBody": "Svæv mod midten af venstre skærmkant, eller tryk Alt+Shift+C for at åbne din hylde."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Stil for kopieringsindikator",

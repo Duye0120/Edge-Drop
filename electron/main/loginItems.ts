@@ -1,9 +1,8 @@
 /**
  * Launch-at-login.
  *
- * GitHub NSIS: Electron Run keys. Older builds used different value names, so
- * disable still clears leftover names. Enable must not disable Edge-Drop first
- * — that stamps Windows Startup apps as Off and the toggle then fails.
+ * GitHub preview: only its own named Electron Run key. Upstream startup
+ * entries are never changed. Enable preserves the existing approval state.
  *
  * Store / AppX: Windows.ApplicationModel.StartupTask only —
  * getStatus / enable (RequestEnableAsync) / disable. Same API as
@@ -15,17 +14,16 @@ import { isStoreBuild } from './config'
 import { loadSettings, saveSettings } from '../store/settings'
 import type { Settings } from '../../shared/types'
 import { disable, enable, getStatus, StartupTaskState } from './storeStartup'
+import { APP_IDENTITY } from '../../shared/identity'
 
 export { StartupTaskState }
 
-/** Historical + current Run-key names written by this app. */
+/** Preview-owned names only. Never clean up upstream's historical Run keys. */
 export const GITHUB_LOGIN_ITEM_NAMES = [
-  'Edge-Drop',
-  'com.edgedrop.app',
-  'electron.app.Edge-Drop'
+  APP_IDENTITY.loginItemName
 ] as const
 
-export const CANONICAL_LOGIN_ITEM_NAME = 'Edge-Drop'
+export const CANONICAL_LOGIN_ITEM_NAME = APP_IDENTITY.loginItemName
 
 export interface LaunchAtLoginResult {
   enabled: boolean
@@ -215,19 +213,6 @@ function resultFromState(state: number | null, wantEnabled?: boolean): LaunchAtL
   }
 }
 
-function collectGithubLoginNames(exePath: string): Set<string> {
-  const names = new Set<string>(GITHUB_LOGIN_ITEM_NAMES)
-  try {
-    const items = app.getLoginItemSettings({ path: exePath }).launchItems ?? []
-    for (const item of items) {
-      if (item.name && isOurLoginExe(item.path, exePath)) names.add(item.name)
-    }
-  } catch {
-    /* ignore */
-  }
-  return names
-}
-
 export function readGithubLaunchAtLogin(): LaunchAtLoginResult {
   const exePath = app.getPath('exe')
 
@@ -264,9 +249,9 @@ export function readGithubLaunchAtLogin(): LaunchAtLoginResult {
       args: ['--hidden']
     })
     const items = seen.launchItems ?? []
-    const ours = items.filter((item) => isOurLoginExe(item.path, exePath))
+    const ours = items.filter((item) => item.name === CANONICAL_LOGIN_ITEM_NAME && isOurLoginExe(item.path, exePath))
     const anyEnabled = ours.some((item) => item.enabled)
-    const enabled = anyEnabled || !!seen.executableWillLaunchAtLogin
+    const enabled = anyEnabled || (items.length === 0 && !!seen.executableWillLaunchAtLogin)
     const blockedByUser =
       ours.length > 0 && !anyEnabled && ours.some((item) => !item.enabled) && !seen.executableWillLaunchAtLogin
     return {
@@ -281,36 +266,10 @@ export function readGithubLaunchAtLogin(): LaunchAtLoginResult {
 
 export function applyGithubLaunchAtLogin(wantLaunch: boolean): LaunchAtLoginResult {
   const exePath = app.getPath('exe')
-  const names = collectGithubLoginNames(exePath)
+  const names = GITHUB_LOGIN_ITEM_NAMES
 
   if (wantLaunch) {
-    // Do not disable Edge-Drop before enabling it. That writes Windows
-    // StartupApproved as Off and the in-app toggle then fails after upgrades.
-    for (const name of names) {
-      if (name === CANONICAL_LOGIN_ITEM_NAME) continue
-      try {
-        app.setLoginItemSettings({
-          openAtLogin: false,
-          path: exePath,
-          name
-        })
-      } catch {
-        /* best-effort orphan cleanup */
-      }
-      // Remove stale raw values pointing at old install folders so Task
-      // Manager never shows ghost duplicates after an update/reinstall.
-      try {
-        const raw = getRawGithubRunCommand(name)
-        if (raw !== null && !isRunValueHealthy(raw, exePath)) {
-          deleteRawGithubRunValue(name)
-          clearStartupApprovedBlock(name)
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-
-    // Clear any previous disable block in Windows StartupApproved for Edge-Drop
+    // Clear any previous disable block in Windows StartupApproved for the preview
     clearStartupApprovedBlock(CANONICAL_LOGIN_ITEM_NAME)
 
     try {

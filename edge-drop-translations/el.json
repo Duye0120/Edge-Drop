@@ -214,7 +214,7 @@
     "display": "Οθόνη",
     "quit": "Έξοδος από το Edge-Drop",
     "welcomeTitle": "Ράφι Προχείρου Edge-Drop",
-    "welcomeBody": "Αιωρηθείτε against τη μέση-αριστερή άκρη οθόνης ή πατήστε Alt+C για να ανοίξετε το ράφι σας."
+    "welcomeBody": "Αιωρηθείτε against τη μέση-αριστερή άκρη οθόνης ή πατήστε Alt+Shift+C για να ανοίξετε το ράφι σας."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Στυλ Ένδειξης Αντιγραφής",

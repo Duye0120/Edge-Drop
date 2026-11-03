@@ -214,7 +214,7 @@
     "display": "Écran",
     "quit": "Quitter Edge-Drop",
     "welcomeTitle": "Étagère de presse-papiers Edge-Drop",
-    "welcomeBody": "Survolez le milieu du bord gauche de l'écran, ou appuyez sur Alt+C pour ouvrir votre étagère."
+    "welcomeBody": "Survolez le milieu du bord gauche de l'écran, ou appuyez sur Alt+Shift+C pour ouvrir votre étagère."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Style de l'indicateur de copie",

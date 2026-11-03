@@ -2,6 +2,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { app } from 'electron'
+import { APP_IDENTITY } from '../../shared/identity'
 
 /** Mutable runtime flags (kept separate from the frozen config object). */
 export const runtime = {
@@ -108,7 +109,7 @@ export function shouldStartHidden(): boolean {
 }
 
 export const APP_CONFIG = {
-  appName: 'Edge-Drop',
+  appName: APP_IDENTITY.productName,
   /** Custom protocol used to serve local image files to the renderer securely. */
   imageProtocol: 'edgelocal',
   is: {

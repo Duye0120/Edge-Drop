@@ -214,7 +214,7 @@
     "display": "Ecran",
     "quit": "Ieșire din Edge-Drop",
     "welcomeTitle": "Raft clipboard Edge-Drop",
-    "welcomeBody": "Survolează marginea stângă-centrală a ecranului sau apasă Alt+C pentru a-ți glisa raftul."
+    "welcomeBody": "Survolează marginea stângă-centrală a ecranului sau apasă Alt+Shift+C pentru a-ți glisa raftul."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Stil indicator copiere",

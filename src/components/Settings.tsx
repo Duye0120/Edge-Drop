@@ -1,3 +1,4 @@
+import { APP_IDENTITY } from '../../shared/identity'
 import { useEffect, useState, useRef, useLayoutEffect, type ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '../store/appStore'
@@ -966,7 +967,7 @@ export function Settings({
             {
               id: 'game-mode',
               title: preferences.gameMode,
-              desc: preferences.gameDesc.replace('{shortcut}', settings.toggleHotkey || 'Alt+C'),
+              desc: preferences.gameDesc.replace('{shortcut}', settings.toggleHotkey || APP_IDENTITY.defaultHotkey),
               trailing: <Toggle label={preferences.gameMode} checked={settings.gameMode ?? false} onChange={(value) => { void patch({ gameMode: value }) }} />
             },
             {
@@ -974,7 +975,7 @@ export function Settings({
               title: t('behaviour.hoverActivationTitle'),
               desc: settings.gameMode ? preferences.gameStatus : hoverOn
                 ? t('behaviour.hoverActivationDescOn')
-                : t('behaviour.hoverActivationDescOff', { shortcut: settings.toggleHotkey || 'Alt+C' }),
+                : t('behaviour.hoverActivationDescOff', { shortcut: settings.toggleHotkey || APP_IDENTITY.defaultHotkey }),
               trailing: (
                 <Toggle
                   checked={hoverOn}
@@ -1016,7 +1017,7 @@ export function Settings({
               desc: isHorizontal ? (t('groups.toggleHotkeyPressDesc') || t('behaviour.toggleHotkeyDesc')) : t('behaviour.toggleHotkeyDesc'),
               below: (
                 <HotkeyRecorder
-                  hotkey={settings.toggleHotkey || 'Alt+C'}
+                  hotkey={settings.toggleHotkey || APP_IDENTITY.defaultHotkey}
                   onChange={(nextHotkey) => {
                     patch({ toggleHotkey: nextHotkey })
                     pushToast({

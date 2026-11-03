@@ -214,7 +214,7 @@
     "display": "显示器",
     "quit": "退出 Edge-Drop",
     "welcomeTitle": "Edge-Drop 剪贴板搁架",
-    "welcomeBody": "将鼠标悬停在屏幕左中边缘，或按 Alt+C 滑出打开您的搁架。"
+    "welcomeBody": "将鼠标悬停在屏幕左中边缘，或按 Alt+Shift+C 滑出打开您的搁架。"
   },
   "flyout": {
     "copyBeaconStyleTitle": "复制指示器样式",

@@ -1,3 +1,4 @@
+import { APP_IDENTITY } from '../shared/identity'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Registry behavior is exercised through mocks, including on Linux CI.
@@ -73,7 +74,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 function regQueryOutput(value: string): string {
-  return `\r\nHKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\r\n    Edge-Drop    REG_SZ    ${value}\r\n`
+  return `\r\nHKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\r\n    ${APP_IDENTITY.loginItemName}    REG_SZ    ${value}\r\n`
 }
 
 describe('GitHub Run-key health (quoted, current path, --hidden)', () => {
@@ -120,10 +121,10 @@ describe('raw registry read (reg query)', () => {
   it('parses REG_SZ value from reg query output', () => {
     const want = formatGithubRunCommand(mocks.exePath)
     mocks.execFileSync.mockReturnValue(regQueryOutput(want))
-    expect(getRawGithubRunCommand('Edge-Drop')).toBe(want)
+    expect(getRawGithubRunCommand(APP_IDENTITY.loginItemName)).toBe(want)
     expect(mocks.execFileSync).toHaveBeenCalledWith(
       'reg',
-      expect.arrayContaining(['query', expect.stringContaining('Run'), '/v', 'Edge-Drop']),
+      expect.arrayContaining(['query', expect.stringContaining('Run'), '/v', APP_IDENTITY.loginItemName]),
       expect.objectContaining({ windowsHide: true })
     )
   })
@@ -132,7 +133,7 @@ describe('raw registry read (reg query)', () => {
     mocks.execFileSync.mockImplementation(() => {
       throw new Error('ERROR: The system was unable to find the specified registry key or value.')
     })
-    expect(getRawGithubRunCommand('Edge-Drop')).toBeNull()
+    expect(getRawGithubRunCommand(APP_IDENTITY.loginItemName)).toBeNull()
   })
 
   it('isGithubRunKeyHealthy reflects on-disk truth', () => {
@@ -144,10 +145,10 @@ describe('raw registry read (reg query)', () => {
 
   it('deleteRawGithubRunValue uses reg delete', () => {
     mocks.execFileSync.mockReturnValue('')
-    deleteRawGithubRunValue('Edge-Drop')
+    deleteRawGithubRunValue(APP_IDENTITY.loginItemName)
     expect(mocks.execFileSync).toHaveBeenCalledWith(
       'reg',
-      expect.arrayContaining(['delete', expect.stringContaining('Run'), '/v', 'Edge-Drop', '/f']),
+      expect.arrayContaining(['delete', expect.stringContaining('Run'), '/v', APP_IDENTITY.loginItemName, '/f']),
       expect.anything()
     )
   })
@@ -178,12 +179,12 @@ describe('reconcile never silently loses ON after update', () => {
     const next = await reconcileLaunchAtLoginOnStartup()
     expect(next.launchAtLogin).toBe(true)
     expect(mocks.setLoginItemSettings).toHaveBeenCalledWith(
-      expect.objectContaining({ openAtLogin: true, name: 'Edge-Drop' })
+      expect.objectContaining({ openAtLogin: true, name: APP_IDENTITY.loginItemName })
     )
   })
 
   it('settings ON + explicitly blocked in Task Manager → reflects OFF (OS wins)', async () => {
-    mocks.launchItems = [{ name: 'Edge-Drop', path: mocks.exePath, enabled: false }]
+    mocks.launchItems = [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: false }]
     mocks.executableWillLaunchAtLogin = false
     mocks.execFileSync.mockImplementation(() => {
       throw new Error('not found')
@@ -194,7 +195,7 @@ describe('reconcile never silently loses ON after update', () => {
 
   it('settings OFF + leftover ON → disables without re-enabling', async () => {
     mocks.settings = { launchAtLogin: false }
-    mocks.launchItems = [{ name: 'Edge-Drop', path: mocks.exePath, enabled: true }]
+    mocks.launchItems = [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: true }]
     mocks.executableWillLaunchAtLogin = true
     mocks.execFileSync.mockImplementation((bin: string, args: string[]) => {
       if ((args as string[])[0] === 'query') throw new Error('not found')
@@ -208,7 +209,7 @@ describe('reconcile never silently loses ON after update', () => {
 
   it('unquoted 0.3.0 value gets healed to quoted form on next launch', async () => {
     mocks.settings = { launchAtLogin: true }
-    mocks.launchItems = [{ name: 'Edge-Drop', path: mocks.exePath, enabled: true, args: ['--hidden'] }]
+    mocks.launchItems = [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: true, args: ['--hidden'] }]
     mocks.executableWillLaunchAtLogin = true
     const unquoted = `${mocks.exePath} --hidden`
     mocks.execFileSync.mockImplementation((bin: string, args: string[]) => {

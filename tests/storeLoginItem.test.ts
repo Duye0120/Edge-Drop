@@ -1,3 +1,4 @@
+import { APP_IDENTITY } from '../shared/identity'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Select the Windows code path; all OS writes are mocked below.
@@ -124,51 +125,22 @@ describe('GitHub exe launch-at-login (orphan Run keys)', () => {
     expect(mocks.setLoginItemSettings).not.toHaveBeenCalled()
   })
 
-  it('enable: writes Edge-Drop on without disabling it first, and only clears other leftover names', async () => {
+  it('enable only registers the preview, even when upstream names point to the same executable', async () => {
     mocks.getLoginItemSettings.mockReturnValue({
       launchItems: [
-        { name: 'Edge-Drop', path: mocks.exePath, enabled: true, args: ['--hidden'] }
+        ...['Edge-Drop', 'com.edgedrop.app', 'electron.app.Edge-Drop'].map(name => ({ name, path: mocks.exePath, enabled: true })),
+        { name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: true, args: ['--hidden'] }
       ],
       executableWillLaunchAtLogin: true
     })
     const result = await applyLaunchAtLogin(true)
-    expect(result.ok).toBe(true)
-    expect(result.enabled).toBe(true)
-    expect(mocks.setLoginItemSettings).not.toHaveBeenCalledWith({
-      openAtLogin: false,
-      path: mocks.exePath,
-      name: 'Edge-Drop'
-    })
-    expect(mocks.setLoginItemSettings).toHaveBeenCalledWith({
-      openAtLogin: false,
-      path: mocks.exePath,
-      name: 'com.edgedrop.app'
-    })
-    expect(mocks.setLoginItemSettings).toHaveBeenCalledWith({
-      openAtLogin: false,
-      path: mocks.exePath,
-      name: 'electron.app.Edge-Drop'
-    })
-    expect(mocks.setLoginItemSettings).toHaveBeenCalledWith({
-      openAtLogin: true,
-      path: mocks.exePath,
-      args: ['--hidden'],
-      name: 'Edge-Drop',
-      enabled: true
-    })
-    if (process.platform === 'win32') {
-      expect(mocks.execFileSync).toHaveBeenCalledWith(
-        'reg',
-        expect.arrayContaining([
-          'add',
-          'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run',
-          '/v',
-          'Edge-Drop',
-          '/d',
-          `"${mocks.exePath}" --hidden`
-        ]),
-        expect.anything()
-      )
+    expect(result).toEqual({ enabled: true, blockedByUser: false, ok: true })
+    expect(mocks.setLoginItemSettings.mock.calls).toEqual([[{
+      openAtLogin: true, path: mocks.exePath, args: ['--hidden'],
+      name: APP_IDENTITY.loginItemName, enabled: true
+    }]])
+    for (const [, args] of mocks.execFileSync.mock.calls) {
+      expect((args as string[])[(args as string[]).indexOf('/v') + 1]).toBe(APP_IDENTITY.loginItemName)
     }
   })
 
@@ -192,7 +164,7 @@ describe('GitHub exe launch-at-login (orphan Run keys)', () => {
     expect(result.enabled).toBe(true)
     expect(mocks.setLoginItemSettings).toHaveBeenCalledWith(expect.objectContaining({
       openAtLogin: true,
-      name: 'Edge-Drop',
+      name: APP_IDENTITY.loginItemName,
       enabled: true
     }))
   })
@@ -200,7 +172,7 @@ describe('GitHub exe launch-at-login (orphan Run keys)', () => {
   it('enable: Windows Startup apps Off is blocked, not treated as success', async () => {
     mocks.getLoginItemSettings.mockReturnValue({
       launchItems: [
-        { name: 'Edge-Drop', path: mocks.exePath, enabled: false, args: ['--hidden'] }
+        { name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: false, args: ['--hidden'] }
       ],
       executableWillLaunchAtLogin: false
     })
@@ -210,38 +182,25 @@ describe('GitHub exe launch-at-login (orphan Run keys)', () => {
     expect(result.ok).toBe(false)
   })
 
-  it('disable: removes every historical name, including leftovers Task Manager still lists', async () => {
+  it('disable removes only the preview and leaves upstream startup entries untouched', async () => {
     mocks.getLoginItemSettings.mockReturnValue({
-      launchItems: [
-        { name: 'com.edgedrop.app', path: mocks.exePath, enabled: false, args: [] },
-        { name: 'Edge-Drop', path: mocks.exePath, enabled: false, args: ['--hidden'] }
-      ],
-      executableWillLaunchAtLogin: false
+      launchItems: ['Edge-Drop', 'com.edgedrop.app', 'electron.app.Edge-Drop'].map(name => ({ name, path: mocks.exePath, enabled: true })),
+      executableWillLaunchAtLogin: true
     })
     const result = await applyLaunchAtLogin(false)
     expect(result.enabled).toBe(false)
-    expect(mocks.setLoginItemSettings).toHaveBeenCalledWith({
-      openAtLogin: false,
-      path: mocks.exePath,
-      name: 'com.edgedrop.app'
-    })
-    expect(mocks.setLoginItemSettings).toHaveBeenCalledWith({
-      openAtLogin: false,
-      path: mocks.exePath,
-      name: 'Edge-Drop'
-    })
-    expect(mocks.setLoginItemSettings).toHaveBeenCalledWith({
-      openAtLogin: false,
-      path: mocks.exePath,
-      name: 'electron.app.Edge-Drop'
-    })
-    expect(mocks.setLoginItemSettings).not.toHaveBeenCalledWith(expect.objectContaining({ openAtLogin: true }))
+    expect(mocks.setLoginItemSettings.mock.calls).toEqual([[{
+      openAtLogin: false, path: mocks.exePath, name: APP_IDENTITY.loginItemName
+    }]])
+    for (const [, args] of mocks.execFileSync.mock.calls) {
+      expect((args as string[])[(args as string[]).indexOf('/v') + 1]).toBe(APP_IDENTITY.loginItemName)
+    }
   })
 
   it('reads Task Manager disabled items as not launching', async () => {
     mocks.getLoginItemSettings.mockReturnValue({
       launchItems: [
-        { name: 'Edge-Drop', path: mocks.exePath, enabled: false, args: ['--hidden'] }
+        { name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: false, args: ['--hidden'] }
       ],
       executableWillLaunchAtLogin: false
     })
@@ -253,7 +212,7 @@ describe('GitHub exe launch-at-login (orphan Run keys)', () => {
   it('startup reconcile: Task Manager off + settings still on → settings become off (OS wins)', async () => {
     mocks.loadSettings.mockReturnValue({ launchAtLogin: true })
     mocks.getLoginItemSettings.mockReturnValue({
-      launchItems: [{ name: 'Edge-Drop', path: mocks.exePath, enabled: false }],
+      launchItems: [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: false }],
       executableWillLaunchAtLogin: false
     })
     const next = await reconcileLaunchAtLoginOnStartup()
@@ -265,7 +224,7 @@ describe('GitHub exe launch-at-login (orphan Run keys)', () => {
     mocks.loadSettings.mockReturnValue({ launchAtLogin: false })
     mocks.getLoginItemSettings
       .mockReturnValueOnce({
-        launchItems: [{ name: 'com.edgedrop.app', path: mocks.exePath, enabled: true }],
+        launchItems: [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: true }],
         executableWillLaunchAtLogin: true
       })
       .mockReturnValue({
@@ -275,7 +234,7 @@ describe('GitHub exe launch-at-login (orphan Run keys)', () => {
     await reconcileLaunchAtLoginOnStartup()
     expect(mocks.setLoginItemSettings).toHaveBeenCalledWith(expect.objectContaining({
       openAtLogin: false,
-      name: 'com.edgedrop.app'
+      name: APP_IDENTITY.loginItemName
     }))
   })
 
@@ -304,7 +263,7 @@ describe('GitHub Run-key quoting and update heal', () => {
     mocks.saveSettings.mockClear()
     mocks.getLoginItemSettings.mockReset()
     mocks.getLoginItemSettings.mockReturnValue({
-      launchItems: [{ name: 'Edge-Drop', path: mocks.exePath, enabled: true, args: ['--hidden'] }],
+      launchItems: [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: true, args: ['--hidden'] }],
       executableWillLaunchAtLogin: true
     })
     mocks.loadSettings.mockReturnValue({ launchAtLogin: true })
@@ -346,7 +305,7 @@ describe('GitHub Run-key quoting and update heal', () => {
   it('enable with a spaced username writes the quoted command via reg add, not a shell string', async () => {
     mocks.exePath = spacedExe
     mocks.getLoginItemSettings.mockReturnValue({
-      launchItems: [{ name: 'Edge-Drop', path: spacedExe, enabled: true, args: ['--hidden'] }],
+      launchItems: [{ name: APP_IDENTITY.loginItemName, path: spacedExe, enabled: true, args: ['--hidden'] }],
       executableWillLaunchAtLogin: true
     })
     const result = await applyLaunchAtLogin(true)
@@ -363,7 +322,7 @@ describe('GitHub Run-key quoting and update heal', () => {
         'add',
         'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run',
         '/v',
-        'Edge-Drop',
+        APP_IDENTITY.loginItemName,
         '/t',
         'REG_SZ',
         '/d',
@@ -380,7 +339,7 @@ describe('GitHub Run-key quoting and update heal', () => {
 
   it('disable removes the raw Run value (reg delete) and never re-adds it', async () => {
     mocks.getLoginItemSettings.mockReturnValue({
-      launchItems: [{ name: 'Edge-Drop', path: mocks.exePath, enabled: false, args: ['--hidden'] }],
+      launchItems: [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: false, args: ['--hidden'] }],
       executableWillLaunchAtLogin: false
     })
     await applyLaunchAtLogin(false)
@@ -400,7 +359,7 @@ describe('GitHub Run-key quoting and update heal', () => {
     mocks.exePath = spacedExe
     mocks.loadSettings.mockReturnValue({ launchAtLogin: true })
     mocks.getLoginItemSettings.mockReturnValue({
-      launchItems: [{ name: 'Edge-Drop', path: spacedExe, enabled: true, args: ['--hidden'] }],
+      launchItems: [{ name: APP_IDENTITY.loginItemName, path: spacedExe, enabled: true, args: ['--hidden'] }],
       executableWillLaunchAtLogin: true
     })
 
@@ -412,13 +371,13 @@ describe('GitHub Run-key quoting and update heal', () => {
       openAtLogin: true,
       path: spacedExe,
       args: ['--hidden'],
-      name: 'Edge-Drop',
+      name: APP_IDENTITY.loginItemName,
       enabled: true
     })
     if (process.platform === 'win32') {
       expect(mocks.execFileSync).toHaveBeenCalledWith(
         'reg',
-        expect.arrayContaining(['/v', 'Edge-Drop', '/d', quotedSpaced, '/f']),
+        expect.arrayContaining(['/v', APP_IDENTITY.loginItemName, '/d', quotedSpaced, '/f']),
         expect.anything()
       )
     }
@@ -427,7 +386,7 @@ describe('GitHub Run-key quoting and update heal', () => {
   it('update heal: Task Manager / settings already off is not re-enabled', async () => {
     mocks.loadSettings.mockReturnValue({ launchAtLogin: true })
     mocks.getLoginItemSettings.mockReturnValue({
-      launchItems: [{ name: 'Edge-Drop', path: mocks.exePath, enabled: false }],
+      launchItems: [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: false }],
       executableWillLaunchAtLogin: false
     })
 
@@ -448,7 +407,7 @@ describe('GitHub Run-key quoting and update heal', () => {
     mocks.loadSettings.mockReturnValue({ launchAtLogin: false })
     mocks.getLoginItemSettings
       .mockReturnValueOnce({
-        launchItems: [{ name: 'Edge-Drop', path: mocks.exePath, enabled: true }],
+        launchItems: [{ name: APP_IDENTITY.loginItemName, path: mocks.exePath, enabled: true }],
         executableWillLaunchAtLogin: true
       })
       .mockReturnValue({
@@ -482,8 +441,8 @@ describe('GitHub Run-key quoting and update heal', () => {
     // Simulate reg query returning healthy quoted command
     mocks.execFileSync.mockImplementation((bin: string, args: string[]) => {
       if (bin === 'reg' && (args as string[])[0] === 'query') {
-        if ((args as string[])[1].includes('Run') && (args as string[])[3] === 'Edge-Drop') {
-          return `\r\n    Edge-Drop    REG_SZ    "${spacedExe}" --hidden\r\n`
+        if ((args as string[])[1].includes('Run') && (args as string[])[3] === APP_IDENTITY.loginItemName) {
+          return `\r\n    ${APP_IDENTITY.loginItemName}    REG_SZ    "${spacedExe}" --hidden\r\n`
         }
       }
       throw new Error('not found')
@@ -510,8 +469,8 @@ describe('GitHub Run-key quoting and update heal', () => {
           if ((args as string[])[1].includes('StartupApproved')) {
             throw new Error('not found') // Not blocked
           }
-          if ((args as string[])[1].includes('Run') && (args as string[])[3] === 'Edge-Drop') {
-            return `\r\n    Edge-Drop    REG_SZ    "${spacedExe}" --hidden\r\n`
+          if ((args as string[])[1].includes('Run') && (args as string[])[3] === APP_IDENTITY.loginItemName) {
+            return `\r\n    ${APP_IDENTITY.loginItemName}    REG_SZ    "${spacedExe}" --hidden\r\n`
           }
         }
       }
@@ -525,18 +484,18 @@ describe('GitHub Run-key quoting and update heal', () => {
 
   it('StartupApproved block detection and unblocking', () => {
     // 1. Blocked when odd byte
-    mocks.execFileSync.mockReturnValueOnce('\r\n    Edge-Drop    REG_BINARY    0300000053FD31D3D585DA01\r\n')
-    expect(isBlockedInStartupApproved('Edge-Drop')).toBe(true)
+    mocks.execFileSync.mockReturnValueOnce('\r\n    Preview    REG_BINARY    0300000053FD31D3D585DA01\r\n')
+    expect(isBlockedInStartupApproved(APP_IDENTITY.loginItemName)).toBe(true)
 
     // 2. Unblocked when 02
-    mocks.execFileSync.mockReturnValueOnce('\r\n    Edge-Drop    REG_BINARY    0200000053FD31D3D585DA01\r\n')
-    expect(isBlockedInStartupApproved('Edge-Drop')).toBe(false)
+    mocks.execFileSync.mockReturnValueOnce('\r\n    Preview    REG_BINARY    0200000053FD31D3D585DA01\r\n')
+    expect(isBlockedInStartupApproved(APP_IDENTITY.loginItemName)).toBe(false)
 
     // 3. Clear block issues reg delete
-    clearStartupApprovedBlock('Edge-Drop')
+    clearStartupApprovedBlock(APP_IDENTITY.loginItemName)
     expect(mocks.execFileSync).toHaveBeenCalledWith(
       'reg',
-      expect.arrayContaining(['delete', expect.stringContaining('StartupApproved'), '/v', 'Edge-Drop', '/f']),
+      expect.arrayContaining(['delete', expect.stringContaining('StartupApproved'), '/v', APP_IDENTITY.loginItemName, '/f']),
       expect.anything()
     )
   })

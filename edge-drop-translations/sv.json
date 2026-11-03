@@ -214,7 +214,7 @@
     "display": "Skärm",
     "quit": "Avsluta Edge-Drop",
     "welcomeTitle": "Edge-Drop urklippshylla",
-    "welcomeBody": "Sväv mot mitten av den vänstra skärmkanten eller tryck Alt+C för att skjuta ut din hylla."
+    "welcomeBody": "Sväv mot mitten av den vänstra skärmkanten eller tryck Alt+Shift+C för att skjuta ut din hylla."
   },
   "flyout": {
     "copyBeaconStyleTitle": "Stil för kopieringsindikator",
