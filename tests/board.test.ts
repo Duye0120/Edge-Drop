@@ -55,12 +55,19 @@ describe('views, search and local calendar boundaries', () => {
     expect(input.map((c) => c.id)).toEqual(['a', 'b'])
   })
   it('uses the next local midnight across the 25-hour DST transition', () => {
+    const originalZone = process.env.TZ ?? Intl.DateTimeFormat().resolvedOptions().timeZone
     vi.stubEnv('TZ', 'America/New_York')
-    const day = new Date('2026-11-01T12:00:00-05:00').getTime()
-    const list = [card({ id: 'late', dueAt: new Date('2026-11-01T23:30:00-05:00').getTime() }),
-      card({ id: 'next', dueAt: new Date('2026-11-02T00:00:00-05:00').getTime() })]
-    expect([...selectBoardCards(list, 'today', '', day).values()].flat().map((c) => c.id)).toEqual(['late'])
-    expect([...selectBoardCards(list, 'upcoming', '', day).values()].flat().map((c) => c.id)).toEqual(['next'])
+    try {
+      const day = new Date('2026-11-01T12:00:00-05:00').getTime()
+      const list = [card({ id: 'late', dueAt: new Date('2026-11-01T23:30:00-05:00').getTime() }),
+        card({ id: 'next', dueAt: new Date('2026-11-02T00:00:00-05:00').getTime() })]
+      expect([...selectBoardCards(list, 'today', '', day).values()].flat().map((c) => c.id)).toEqual(['late'])
+      expect([...selectBoardCards(list, 'upcoming', '', day).values()].flat().map((c) => c.id)).toEqual(['next'])
+    } finally {
+      // Windows does not reset its runtime timezone when TZ is deleted.
+      // Restore the actual zone before unstubbing the original environment.
+      process.env.TZ = originalZone
+    }
   })
   it('formats local input without converting to UTC', () => {
     expect(localDateTimeInput(null)).toBe('')
