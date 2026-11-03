@@ -27,6 +27,8 @@ import { useFilteredItems } from '../hooks/useFilteredItems'
 import { registerEdgeDragCue } from '../lib/edgeDrag'
 import { DashedOutline } from './DashedOutline'
 import { isKept } from '../../shared/itemMeta'
+import { BoardPanel } from './BoardPanel'
+import { boardStrings } from '../i18n/board'
 
 import { useTranslation } from '../i18n'
 
@@ -56,6 +58,9 @@ const SHELF_CLOSE_MOTION =
   'clip-path 289ms linear(0, 0.021 1.8%, 0.058 3.8%, 0.116 6.3%, 0.23 10.5%, 0.402 16.8%, 0.503 20.8%, 0.586 24.5%, 0.659 28.2%, 0.725 32.3%, 0.782 36.5%, 0.832 41%, 0.874 46%, 0.911 51.7%, 0.941 58.5%, 0.965 66.8%, 0.982 77.5%, 0.994 93.8%, 1)'
 
 export function Panel() {
+  const [personal, setPersonal] = useState(false)
+  const [boardMounted, setBoardMounted] = useState(false)
+  const demo = useStore((s) => s.demo)
   const open = useStore((s) => s.open)
   const { pinned, recent } = useFilteredItems()
   const filteredItems = useMemo(() => [...pinned, ...recent], [pinned, recent])
@@ -575,6 +580,7 @@ export function Panel() {
           style={isHorizontal ? { width: 'min(calc(100vw - 60px), 1080px)', height: 210 } : { height: panelHeightStr }}
         >
           <Header
+            personal={personal}
             isHorizontal={isHorizontal}
             itemCount={filteredCount}
             clearProps={{
@@ -593,7 +599,18 @@ export function Panel() {
           />
 
           <ToastStack />
-          {!isHorizontal && !emojiOpen && !settingsOpen && <ShelfSearch />}
+          {!settingsOpen && !demo && <div className="shelf-modes" role="group" aria-label={boardStrings().board}>
+            <button type="button" aria-pressed={!personal} onClick={() => setPersonal(false)}>{boardStrings().clipboard}</button>
+            <button type="button" aria-pressed={personal} onClick={() => {
+              setEmojiOpen(false)
+              const state = useStore.getState()
+              state.setPreviewItemId(null)
+              state.closeCardMenu()
+              setBoardMounted(true)
+              setPersonal(true)
+            }}>{boardStrings().board}</button>
+          </div>}
+          {!personal && !isHorizontal && !emojiOpen && !settingsOpen && <ShelfSearch />}
           <div style={{ flex: 1, display: 'grid', gridTemplate: '1fr / 1fr', overflow: 'hidden', position: 'relative' }}>
             {/* Main clipboard / emoji view (persistent so ItemList is never torn down and doesn't jump on Y-axis) */}
             <div
@@ -604,11 +621,11 @@ export function Panel() {
                 overflow: 'hidden',
                 position: 'relative',
                 opacity: settingsOpen ? 0 : 1,
-                visibility: settingsOpen ? 'hidden' : 'visible',
-                pointerEvents: settingsOpen ? 'none' : 'auto',
+                visibility: settingsOpen || personal ? 'hidden' : 'visible',
+                pointerEvents: settingsOpen || personal ? 'none' : 'auto',
                 transition: `opacity ${settings.reduceMotion ? '0.01s' : '0.16s'} ease, visibility ${settings.reduceMotion ? '0.01s' : '0.16s'} ease`
               }}
-              aria-hidden={settingsOpen}
+              aria-hidden={settingsOpen || personal}
             >
               <div style={{ flex: 1, minHeight: 0, display: 'grid', gridTemplate: '1fr / 1fr', overflow: 'hidden' }}>
                 <div
@@ -662,6 +679,10 @@ export function Panel() {
                 </div>
               )}
             </div>
+
+            {boardMounted && <div style={{ gridArea: '1 / 1 / 2 / 2', display: personal && !settingsOpen ? 'flex' : 'none', overflow: 'hidden', minHeight: 0 }}>
+              <BoardPanel active={personal && !settingsOpen} horizontal={isHorizontal} />
+            </div>}
 
             {/* Settings view */}
             <AnimatePresence>

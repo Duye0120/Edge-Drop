@@ -177,6 +177,9 @@ win.addEventListener('drop', (e: any) => {
 }, true)
 
 const api = {
+  loadBoard: () => invoke('board:load'),
+  executeBoard: (command: import('../../shared/board').BoardCommand) => invoke('board:execute', command),
+  onBoardChanged: (cb: (snapshot: import('../../shared/board').BoardSnapshot) => void) => on('board:changed', cb),
   /* Renderer -> Main */
   loadState: () => invoke('state:load'),
   setPinned: (id: string, pinned: boolean) => invoke('item:set-pinned', id, pinned),

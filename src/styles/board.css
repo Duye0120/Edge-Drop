@@ -1,0 +1,62 @@
+.shelf-modes { display: flex; margin: 2px 14px 8px; gap: 5px; flex-shrink: 0; }
+.shelf-modes button { flex: 1; border-radius: 8px; padding: 7px 5px; color: var(--text-tertiary); font-size: 11px; font-weight: 600; }
+.shelf-modes button[aria-pressed="true"] { background: var(--bg-2); color: var(--text-primary); }
+.board-panel { flex: 1; flex-direction: column; overflow: hidden; min-height: 0; color: var(--text-primary); font-family: var(--font-ui); }
+.board-panel button, .shelf-modes button { cursor: pointer; border: 0; background: transparent; font: inherit; }
+.board-panel button:disabled { opacity: .4; cursor: default; }
+.board-panel button:focus-visible, .shelf-modes button:focus-visible { outline: 2px solid #a9a0eb; outline-offset: -2px; }
+.board-panel input, .board-panel textarea { font-family: var(--font-ui); font-size: 12px; color: var(--text-primary); background: var(--bg-2); border: 1px solid var(--edge-strong); border-radius: 7px; min-width: 0; outline: none; }
+.board-panel input:focus, .board-panel textarea:focus { border-color: #a9a0eb; }
+.board-toolbar { flex-shrink: 0; padding: 0 14px 8px; }
+.board-views { display: flex; gap: 2px; margin-bottom: 8px; }
+.board-views button { color: var(--text-tertiary); font-size: 10px; padding: 5px 6px; border-radius: 6px; white-space: nowrap; }
+.board-views button[aria-pressed="true"] { color: var(--text-primary); background: var(--bg-3); }
+.board-search { display: flex; align-items: center; gap: 6px; color: var(--text-tertiary); }
+.board-search input { width: 100%; border: none; background: transparent; padding: 7px 0; }
+.board-search button { color: var(--text-secondary); }
+.board-panel .board-add { color: var(--text-primary); font-size: 11px; padding: 6px 0; }
+.board-main { overflow-y: auto; overflow-x: hidden; padding: 0 14px 12px; min-height: 0; flex: 1; scrollbar-width: thin; scrollbar-color: #333 transparent; }
+.board-group { margin-bottom: 10px; }
+.board-group-title { display: flex; align-items: center; gap: 6px; width: 100%; text-align: left; color: var(--text-tertiary); font-size: 10px !important; padding: 7px 0; }
+.board-group-past .board-group-title { color: #e8b687; }
+.board-count { margin-left: auto; font-family: var(--font-mono); opacity: .8; }
+.board-card { background: var(--bg-card); border-radius: 11px; padding: 11px; margin-bottom: 7px; border-left: 2px solid transparent; }
+.board-card.is-due { border-left-color: #bc895f; }
+.board-card-content { display: flex; align-items: flex-start; gap: 8px; }
+.board-card-content p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; line-height: 1.65; max-height: 180px; overflow-y: auto; user-select: text; }
+.board-card.is-complete .board-card-content p { color: var(--text-tertiary); text-decoration: line-through; }
+.board-panel .board-check { border: 1px solid var(--text-tertiary); width: 17px; height: 17px; margin-top: 2px; border-radius: 5px; flex-shrink: 0; padding: 0; display: grid; place-items: center; color: var(--text-primary); }
+.board-check[aria-pressed="true"] { background: #4e476d; }
+.board-memo-icon { flex-shrink: 0; margin-top: 3px; color: #b6aecf; }
+.board-card-time { margin-top: 8px; color: var(--text-tertiary); font-size: 9px; line-height: 1.5; }
+.board-card-actions { display: flex; align-items: center; justify-content: flex-end; gap: 4px; margin-top: 7px; }
+.board-card-kind { margin-right: auto; font-size: 9px; color: var(--text-tertiary); }
+.board-card-actions button { color: var(--text-secondary); font-size: 9px; padding: 4px; border-radius: 4px; display: flex; align-items: center; }
+.board-card-actions button:hover { background: #333; }
+.board-card-actions button[aria-pressed="true"] { color: #c7bafa; }
+.board-empty { margin: 25px 4px; color: var(--text-tertiary); font-size: 12px; line-height: 1.8; }
+.board-notice { font-size: 11px; line-height: 1.7; color: #ded4bb; padding: 8px; border-radius: 7px; background: #2b251c; }
+.board-notice button { color: inherit; text-decoration: underline; }
+.board-error { background: #321e22; color: #f6b9c5; }
+.board-editor { background: var(--bg-2); padding: 9px; border-radius: 11px; margin-bottom: 12px; }
+.board-kind { display: flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+.board-kind button { color: var(--text-tertiary); font-size: 11px; padding: 4px 7px; border-radius: 5px; }
+.board-kind button[aria-pressed="true"] { color: white; background: #393344; }
+.board-kind span { font-size: 8px; color: var(--text-tertiary); margin-left: auto; }
+.board-editor textarea { width: 100%; padding: 7px; box-sizing: border-box; resize: vertical; min-height: 64px; max-height: 250px; line-height: 1.6; }
+.board-editor label { display: flex; flex-direction: column; gap: 5px; color: var(--text-secondary); font-size: 10px; margin-top: 8px; }
+.board-editor input { color-scheme: dark; width: 100%; box-sizing: border-box; padding: 6px; font-size: 10px; }
+.board-time-hint, .board-panel .board-remove-time { color: var(--text-tertiary); font-size: 9px; margin: 6px 0; padding: 0; }
+.board-editor-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 8px; }
+.board-editor-actions button { color: var(--text-secondary); font-size: 11px; border-radius: 6px; padding: 6px 9px; }
+.board-panel .board-save { background: #d2c8f4; color: #20192e; font-weight: 600; }
+.board-undo { display: flex; justify-content: space-between; flex-shrink: 0; align-items: center; padding: 8px 14px; background: #282330; color: #e2d9fa; font-size: 10px; }
+.board-undo button { color: inherit; text-decoration: underline; padding: 3px; }
+.board-horizontal { flex-direction: row; }
+.board-horizontal .board-toolbar { width: 215px; flex-shrink: 0; padding-top: 3px; }
+.board-horizontal .board-main { display: flex; flex-direction: column; padding-top: 0; }
+.board-horizontal .board-groups { display: flex; align-items: flex-start; gap: 10px; }
+.board-horizontal .board-group { width: 210px; flex-shrink: 0; }
+.board-horizontal .board-main { overflow-x: auto; }
+.board-horizontal .board-editor { width: 240px; flex-shrink: 0; }
+.board-horizontal .board-undo { flex-direction: column; justify-content: center; gap: 8px; }

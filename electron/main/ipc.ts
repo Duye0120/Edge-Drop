@@ -32,6 +32,9 @@ import { toUnpackagedFilePath, toUnpackagedFilePaths } from '../store/paths'
 import { isPasteableEmoji } from '../../shared/emoji'
 import { emojiAssetDir, readEmojiBatch, resolveIconAsset } from './imageProtocol'
 import { saveItemImages } from './saveImages'
+import { BoardStore } from '../store/BoardStore'
+
+const board = new BoardStore()
 
 export { isStoreBuild }
 
@@ -198,6 +201,12 @@ export async function syncLoginItemSettings(launchAtLogin?: boolean): Promise<vo
 }
 
 export function registerIpc(): void {
+  handle('board:load', () => board.load())
+  handle('board:execute', (command) => {
+    const snapshot = board.execute(command)
+    sendToMainWindow('board:changed', snapshot)
+    return snapshot
+  })
   handle('state:load', () => {
     return {
       items: getStore().toDto(),

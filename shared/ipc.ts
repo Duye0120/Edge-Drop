@@ -16,6 +16,8 @@ import type { ClipboardItemDto, DragRequest, MergeResult, Settings } from './typ
 /* ------------------------------------------------------------------ */
 
 export interface InvokeMap {
+  'board:load': { args: []; result: import('./board').BoardSnapshot }
+  'board:execute': { args: [command: import('./board').BoardCommand]; result: import('./board').BoardSnapshot }
   /** Returns the full current item list + settings on startup. */
   'state:load': { args: []; result: { items: ClipboardItemDto[]; settings: Settings; version: string; isStoreBuild?: boolean } }
 
@@ -153,6 +155,7 @@ export interface InvokeMap {
 /* ------------------------------------------------------------------ */
 
 export interface EventMap {
+  'board:changed': [snapshot: import('./board').BoardSnapshot]
   /** Full new item list whenever the history changes. `reason` tells the
    *  renderer WHY: 'usage' pushes come from manual drag gestures (drag-out
    *  recency bumps and drag-in imports) and must never trigger the capture

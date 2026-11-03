@@ -9,6 +9,9 @@ import type { Settings } from './types'
 import type { DragRequest } from './types'
 
 export interface EdgeApi {
+  loadBoard: () => Promise<import('./board').BoardSnapshot>
+  executeBoard: (command: import('./board').BoardCommand) => Promise<import('./board').BoardSnapshot>
+  onBoardChanged: (cb: (snapshot: import('./board').BoardSnapshot) => void) => () => void
   /* Renderer -> Main */
   loadState: () => Promise<{
     items: import('./types').ClipboardItemDto[]

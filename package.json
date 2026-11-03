@@ -66,7 +66,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "Deepender25",
+      "owner": "Duye0120",
       "repo": "Edge-Drop"
     },
     "win": {

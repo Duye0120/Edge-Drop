@@ -79,6 +79,8 @@ export interface UpdateProgress {
 }
 
 interface AppState {
+  /** Holds the blade while a personal card's native date picker is open. */
+  boardEditing: boolean
   items: ClipboardItemDto[]
   settings: Settings
   /** True until the first `state:load` resolves. */
@@ -313,6 +315,7 @@ export const useStore = create<AppState>((set, get) => ({
   updateInfo: null,
   previewItemId: null,
   previewItemRect: null,
+  boardEditing: false,
   sliderActive: false,
   sliderReleasedTime: 0,
   setSliderActive: (active) => set({

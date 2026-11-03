@@ -8,9 +8,11 @@ import { EmojiCategoryBar } from './EmojiCategoryBar'
 
 import { useTranslation } from '../i18n'
 import { ClearMenu } from './ClearMenu'
+import { boardStrings } from '../i18n/board'
 import type { ClipboardItemDto, TypeFilter } from '../../shared/types'
 
 export interface HeaderProps {
+  personal?: boolean
   isHorizontal?: boolean
   itemCount?: number
   clearProps?: {
@@ -22,7 +24,7 @@ export interface HeaderProps {
   }
 }
 
-export function Header({ isHorizontal = false, itemCount, clearProps }: HeaderProps = {}) {
+export function Header({ personal = false, isHorizontal = false, itemCount, clearProps }: HeaderProps = {}) {
   const isStoreBuild = useStore((s) => s.isStoreBuild)
   const { t } = useTranslation()
   const setSettingsOpen = useStore((s) => s.setSettingsOpen)
@@ -99,7 +101,7 @@ export function Header({ isHorizontal = false, itemCount, clearProps }: HeaderPr
           style={{
             gridArea: '1 / 1 / 2 / 2',
             position: 'relative',
-            display: 'flex',
+            display: personal ? 'none' : 'flex',
             alignItems: 'center',
             gap: 6,
             maxWidth: '100%',
@@ -143,6 +145,7 @@ export function Header({ isHorizontal = false, itemCount, clearProps }: HeaderPr
             <EmojiSmileIcon width={14} height={14} />
           </button>
         </div>
+        {personal && !settingsOpen && <span style={{ gridArea: '1 / 1 / 2 / 2', fontSize: 13, fontWeight: 600 }}>{boardStrings().board}</span>}
         {isHorizontal ? (
           <div
             aria-hidden={!settingsOpen}
@@ -216,25 +219,25 @@ export function Header({ isHorizontal = false, itemCount, clearProps }: HeaderPr
         )}
       </div>
 
-      {isHorizontal && !settingsOpen && !emojiOpen && (
+      {isHorizontal && !personal && !settingsOpen && !emojiOpen && (
         <div className="header-search header-search-center">
           <ShelfSearch />
         </div>
       )}
-      {isHorizontal && !settingsOpen && emojiOpen && (
+      {isHorizontal && !personal && !settingsOpen && emojiOpen && (
         <div className="header-search header-search-center">
           <EmojiCategoryBar isHorizontal={true} />
         </div>
       )}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, paddingRight: 2, position: 'relative', zIndex: 260 }}>
-        {isHorizontal && !settingsOpen && itemCount != null && (
+        {isHorizontal && !personal && !settingsOpen && itemCount != null && (
           <div className="footer-capsule" style={{ marginRight: 2 }}>
             <span className="footer-capsule-count" title={`${itemCount}`}>
               {itemCount}
             </span>
           </div>
         )}
-        {isHorizontal && clearProps && !settingsOpen && (
+        {isHorizontal && !personal && clearProps && !settingsOpen && (
           <ClearMenu {...clearProps} menuDirection="down" />
         )}
         {settingsOpen && (

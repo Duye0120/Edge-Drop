@@ -292,7 +292,7 @@ export function useEdgeHover(): void {
     const closePanel = () => {
       const state = useStore.getState()
       if (!state.open) return
-      if (state.sliderActive || state.edgeTransition?.active) return
+      if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return
       if (state.dragActive && !state.internalDragReq) return
 
       // If any flyout is open, let it play its exit spring first.
@@ -328,7 +328,7 @@ export function useEdgeHover(): void {
 
     const scheduleClose = (delay = GRACE_MS) => {
       const state = useStore.getState()
-      if (state.sliderActive || state.edgeTransition?.active) return
+      if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return
       if (state.dragActive && !state.internalDragReq) return
       if (graceTimer !== undefined) return // already closing
 
@@ -429,7 +429,7 @@ export function useEdgeHover(): void {
 
     const isInsideBlade = () => {
       const state = useStore.getState()
-      if (state.sliderActive || state.edgeTransition?.active) return true
+      if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return true
       if (state.cardMenu && cardMenuHolds(state.cardMenu, state.cardMenuRect, cursorInWindow(state, lastClient.current))) return true
       const timeSincePositionChange = state.sliderReleasedTime > 0 ? Date.now() - state.sliderReleasedTime : Infinity
       if (timeSincePositionChange < 1750) return true
