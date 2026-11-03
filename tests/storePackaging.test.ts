@@ -152,7 +152,7 @@ describe('GitHub vs Store packaging contracts (on-disk, not assumed)', () => {
   it('keeps GitHub Releases as the NSIS publish source and NSIS artifact name', () => {
     expect(pkg.build.publish).toEqual({
       provider: 'github',
-      owner: 'Deepender25',
+      owner: 'Duye0120',
       repo: 'Edge-Drop'
     })
     expect(pkg.build.nsis.artifactName).toContain('${version}')
@@ -201,12 +201,11 @@ describe('GitHub vs Store packaging contracts (on-disk, not assumed)', () => {
     expect(src).toContain('https://github.com/Deepender25/Edge-Drop')
   })
 
-  it('updater module hard-returns on Store for every public entry', () => {
+  it('fork updater never imports a network or installer client', () => {
     const src = read('electron/main/updater.ts')
-    expect(src).toMatch(/export function quitAndInstallUpdate[\s\S]*if \(isStoreBuild\(\)\) return/)
-    expect(src).toMatch(/export function syncAutoUpdaterState[\s\S]*if \(isStoreBuild\(\)/)
-    expect(src).toMatch(/export async function checkForUpdatesManual[\s\S]*if \(isStoreBuild\(\)\)/)
-    expect(src).toMatch(/export async function startUpdateDownload[\s\S]*if \(isStoreBuild\(\)/)
-    expect(src).toMatch(/export function initAutoUpdater[\s\S]*if \(isStoreBuild\(\)\)/)
+    expect(src).not.toMatch(/(?:from|require\() ['"]electron-updater/)
+    expect(src).not.toContain('net.request(')
+    expect(src).not.toContain('api.github.com')
+    expect(src).toContain("status: 'disabled'")
   })
 })

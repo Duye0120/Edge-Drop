@@ -65,11 +65,15 @@ export function BoardPanel({ active, horizontal }: { active: boolean; horizontal
   const groups = useMemo(() => selectBoardCards(snapshot?.cards ?? [], view, query, now), [snapshot, view, query, now])
   const count = [...groups.values()].reduce((sum, cards) => sum + cards.length, 0)
   const disabled = busy || !snapshot || !!snapshot.problem
+  const latestCard = editor?.card ? snapshot?.cards.find((c) => c.id === editor.card!.id) : null
+  const conflict = !!editor?.card && !!latestCard && latestCard.revision !== editor.card.revision
 
   const begin = (card: BoardCard | null) => {
     setError('')
     setEditor({ card, kind: card?.kind ?? 'todo', text: card?.text ?? '', time: localDateTimeInput(card?.dueAt ?? null) })
-    void acquireKeyboard('board').then(() => textInput.current?.focus())
+    void acquireKeyboard('board').then(() => {
+      if (active && useStore.getState().open) textInput.current?.focus()
+    })
   }
 
   const execute = async (command: Parameters<typeof edge.executeBoard>[0]) => {
@@ -101,7 +105,7 @@ export function BoardPanel({ active, horizontal }: { active: boolean; horizontal
   }
 
   const save = async () => {
-    if (!editor || !editor.text.trim() || busyRef.current) return
+    if (!editor || !editor.text.trim() || busyRef.current || conflict) return
     const dueAt = editor.time ? new Date(editor.time).getTime() : null
     if (dueAt !== null && (!Number.isFinite(dueAt) || localDateTimeInput(dueAt) !== editor.time)) {
       setError(s.invalidTime); return
@@ -109,7 +113,12 @@ export function BoardPanel({ active, horizontal }: { active: boolean; horizontal
     const result = await execute(editor.card
       ? { type: 'update', id: editor.card.id, revision: editor.card.revision, patch: { text: editor.text, dueAt } }
       : { type: 'create', draft: { kind: editor.kind, text: editor.text, dueAt } })
-    if (result) { setEditor(null); setUndo(null); releaseKeyboard('board') }
+    if (result) {
+      setEditor(null); setUndo(null); setView('all'); setQuery(''); setNow(Date.now())
+      setCollapsed((previous) => ({ ...previous, past: false }))
+      window.requestAnimationFrame(() => root.current?.querySelector('.board-main')?.scrollTo({ top: 0, left: 0 }))
+      releaseKeyboard('board')
+    }
   }
 
   const formatTime = (card: BoardCard) => card.dueAt === null ? s.untimed
@@ -138,7 +147,7 @@ export function BoardPanel({ active, horizontal }: { active: boolean; horizontal
             onKeyDown={(e) => { if (e.key === 'Escape') { e.stopPropagation(); if (query) setQuery(''); else e.currentTarget.blur() } }} />
           {query && <button type="button" aria-label={s.clear} onClick={() => setQuery('')}>×</button>}
         </div>
-        <button type="button" className="board-add" disabled={disabled} onClick={() => begin(null)}>＋ {s.add}</button>
+        <button type="button" className="board-add" disabled={disabled || !!editor} onClick={() => begin(null)}>＋ {s.add}</button>
       </div>
 
       <div className="board-main">
@@ -148,7 +157,10 @@ export function BoardPanel({ active, horizontal }: { active: boolean; horizontal
         {loadingError && <p className="board-notice" role="alert">{s.loadError} <button type="button" onClick={() => void load()}>{s.retry}</button></p>}
         {!snapshot && !loadingError && <p className="board-empty">{s.loading}</p>}
         {editor && (
-          <form className="board-editor" onSubmit={(e) => { e.preventDefault(); void save() }}>
+          <form className="board-editor" onSubmit={(e) => { e.preventDefault(); void save() }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') { e.stopPropagation(); if (!busy) { setEditor(null); setError(''); releaseKeyboard('board') } }
+            }}>
             <div className="board-kind" role="group" aria-label={s.add}>
               {(['todo', 'memo'] as const).map((kind) => <button key={kind} type="button" aria-pressed={editor.kind === kind}
                 disabled={!!editor.card || busy} onClick={() => setEditor({ ...editor, kind })}>{s[kind]}</button>)}
@@ -157,16 +169,20 @@ export function BoardPanel({ active, horizontal }: { active: boolean; horizontal
             <textarea ref={textInput} aria-label={s.text} placeholder={s.placeholder} value={editor.text} maxLength={BOARD_TEXT_MAX}
               rows={3} disabled={busy} onChange={(e) => setEditor({ ...editor, text: e.target.value })}
               onKeyDown={(e) => {
-                if (e.key === 'Escape') { e.stopPropagation(); setEditor(null); releaseKeyboard('board') }
                 if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); void save() }
               }} />
+            {conflict && latestCard && <div className="board-notice" role="alert">
+              <p>{s.conflict}</p>
+              <button type="button" disabled={busy} onClick={() => { setEditor({ ...editor, card: latestCard }); setError('') }}>{s.keepDraft}</button>
+              {' · '}<button type="button" disabled={busy} onClick={() => begin(latestCard)}>{s.useSaved}</button>
+            </div>}
             <label>{s.time}<input type="datetime-local" value={editor.time} disabled={busy}
               onChange={(e) => setEditor({ ...editor, time: e.target.value })} /></label>
             {editor.time ? <button className="board-remove-time" type="button" disabled={busy} onClick={() => setEditor({ ...editor, time: '' })}>{s.removeTime}</button>
               : <p className="board-time-hint">{s.noTime}</p>}
             <div className="board-editor-actions">
               <button type="button" disabled={busy} onClick={() => { setEditor(null); setError(''); releaseKeyboard('board') }}>{s.cancel}</button>
-              <button type="submit" className="board-save" disabled={disabled || !editor.text.trim()}>{busy ? '…' : s.save}</button>
+              <button type="submit" className="board-save" disabled={disabled || conflict || !editor.text.trim()}>{busy ? '…' : s.save}</button>
             </div>
           </form>
         )}
@@ -195,7 +211,7 @@ export function BoardPanel({ active, horizontal }: { active: boolean; horizontal
                     {card.archivedAt === null ? <>
                       <button type="button" aria-label={card.pinned ? s.unpin : s.pin} title={card.pinned ? s.unpin : s.pin}
                         aria-pressed={card.pinned} disabled={disabled} onClick={() => void update(card, { pinned: !card.pinned })}><PinIcon width={13} height={13} /></button>
-                      <button type="button" disabled={disabled} onClick={() => begin(card)}>{s.edit}</button>
+                      <button type="button" disabled={disabled || !!editor} onClick={() => begin(card)}>{s.edit}</button>
                       <button type="button" disabled={disabled} onClick={() => void update(card, { archivedAt: Date.now() }, true)}>{s.archiveCard}</button>
                     </> : <button type="button" disabled={disabled} onClick={() => void update(card, { archivedAt: null }, true)}>{s.restore}</button>}
                   </div>

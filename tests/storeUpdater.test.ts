@@ -1,125 +1,36 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-const mocks = vi.hoisted(() => ({
-  version: '0.3.1',
-  netRequest: vi.fn(),
-  updateAvailable: vi.fn(),
-  getSettings: vi.fn(() => ({ autoUpdates: true }))
-}))
-
+const mocks = vi.hoisted(() => ({ network: vi.fn(), updaterLoaded: vi.fn(), settings: vi.fn() }))
 vi.mock('electron', () => ({
-  app: {
-    getVersion: () => mocks.version,
-    isPackaged: true,
-    getAppPath: () => 'C:\\mock\\app',
-    getPath: () => 'C:\\mock\\userData'
-  },
-  net: {
-    request: (...args: unknown[]) => mocks.netRequest(...args)
-  }
+  app: { getVersion: () => '0.4.0', isPackaged: true, getAppPath: () => 'C:/mock/app' },
+  net: { request: mocks.network, fetch: mocks.network }
 }))
+vi.mock('electron-updater', () => { mocks.updaterLoaded(); throw new Error('Fork must not load electron-updater') })
+vi.mock('../electron/store/settings', () => ({ getSettings: mocks.settings }))
+import { checkForUpdatesManual, clearCachedUpdateState, getCachedUpdateState, initAutoUpdater,
+  quitAndInstallUpdate, startUpdateDownload, syncAutoUpdaterState, triggerBackgroundCheck } from '../electron/main/updater'
 
-vi.mock('../electron/main/state', () => ({
-  pushState: {
-    updateAvailable: (...args: unknown[]) => mocks.updateAvailable(...args),
-    updateDownloaded: vi.fn(),
-    updateProgress: vi.fn()
-  }
-}))
+beforeEach(() => { vi.useFakeTimers(); vi.clearAllMocks() })
+afterEach(() => { vi.useRealTimers(); delete process.env.APP_BUILD_TARGET })
 
-vi.mock('../electron/store/settings', () => ({
-  getSettings: () => mocks.getSettings()
-}))
-
-import {
-  checkForUpdatesManual,
-  initAutoUpdater,
-  quitAndInstallUpdate,
-  startUpdateDownload,
-  syncAutoUpdaterState
-} from '../electron/main/updater'
-
-function mockGithubRelease(tag: string, statusCode = 200): void {
-  mocks.netRequest.mockImplementation(() => {
-    const handlers: Record<string, Array<(...a: unknown[]) => void>> = {}
-    return {
-      setHeader: vi.fn(),
-      abort: vi.fn(),
-      on: (ev: string, cb: (...a: unknown[]) => void) => {
-        (handlers[ev] ??= []).push(cb)
-      },
-      end: () => {
-        const response = {
-          statusCode,
-          on: (ev: string, cb: (chunk?: string) => void) => {
-            if (ev === 'data') cb(JSON.stringify({ tag_name: tag }))
-            if (ev === 'end') cb()
-          }
-        }
-        for (const cb of handlers.response ?? []) cb(response)
-      }
-    }
-  })
-}
-
-describe('auto-updater isolation', () => {
-  beforeEach(() => {
-    delete process.env.APP_BUILD_TARGET
-    mocks.netRequest.mockReset()
-    mocks.updateAvailable.mockReset()
-    mocks.netRequest.mockImplementation(() => {
-      throw new Error('net.request must not run on the Store build')
-    })
-  })
-
-  afterEach(() => {
-    delete process.env.APP_BUILD_TARGET
-  })
-
-  describe('Store build', () => {
-    beforeEach(() => {
-      process.env.APP_BUILD_TARGET = 'store'
-    })
-
-    it('checkForUpdatesManual reports up-to-date at the running version and never touches the network', async () => {
-      const result = await checkForUpdatesManual()
-      expect(result).toEqual({ status: 'up-to-date', version: '0.3.1' })
-      expect(mocks.netRequest).not.toHaveBeenCalled()
-      expect(mocks.updateAvailable).not.toHaveBeenCalled()
-    })
-
-    it('quitAndInstallUpdate / startUpdateDownload / sync / init are no-ops', async () => {
-      expect(() => quitAndInstallUpdate()).not.toThrow()
-      await expect(startUpdateDownload()).resolves.toBeUndefined()
-      expect(() => syncAutoUpdaterState()).not.toThrow()
-      expect(() => initAutoUpdater()).not.toThrow()
-      expect(mocks.netRequest).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('GitHub exe build', () => {
-    it('checkForUpdatesManual reports available when GitHub latest is newer', async () => {
-      mockGithubRelease('v0.3.2')
-      const result = await checkForUpdatesManual()
-      expect(result).toEqual({ status: 'available', version: '0.3.2' })
-      expect(mocks.netRequest).toHaveBeenCalled()
-      expect(mocks.updateAvailable).toHaveBeenCalledWith({ version: '0.3.2' })
-    })
-
-    it('checkForUpdatesManual reports up-to-date when GitHub latest matches', async () => {
-      mockGithubRelease('v0.3.1')
-      const result = await checkForUpdatesManual()
-      expect(result).toEqual({ status: 'up-to-date', version: '0.3.1' })
-      expect(mocks.updateAvailable).not.toHaveBeenCalled()
-    })
-
-    it('checkForUpdatesManual hits the Edge-Drop releases endpoint', async () => {
-      mockGithubRelease('v0.3.1')
-      await checkForUpdatesManual()
-      expect(mocks.netRequest).toHaveBeenCalledWith(expect.objectContaining({
-        method: 'GET',
-        url: 'https://api.github.com/repos/Deepender25/Edge-Drop/releases/latest'
-      }))
-    })
+describe('fork update isolation for every entry point', () => {
+  it.each(['github', 'store'])('%s does not initialize, check, download or install a release', async (target) => {
+    process.env.APP_BUILD_TARGET = target
+    // Legacy user profiles must not reactivate the removed updater.
+    mocks.settings.mockReturnValue({ updateMode: 'auto', autoUpdates: true })
+    initAutoUpdater()
+    syncAutoUpdaterState()
+    triggerBackgroundCheck(0)
+    triggerBackgroundCheck()
+    await startUpdateDownload()
+    quitAndInstallUpdate()
+    clearCachedUpdateState()
+    expect(getCachedUpdateState()).toBeNull()
+    expect(await checkForUpdatesManual()).toEqual({ status: target === 'store' ? 'up-to-date' : 'disabled', version: '0.4.0' })
+    await vi.runAllTimersAsync()
+    expect(mocks.network).not.toHaveBeenCalled()
+    expect(mocks.updaterLoaded).not.toHaveBeenCalled()
+    expect(mocks.settings).not.toHaveBeenCalled()
+    expect(vi.getTimerCount()).toBe(0)
   })
 })

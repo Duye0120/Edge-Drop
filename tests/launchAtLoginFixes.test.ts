@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+// Registry behavior is exercised through mocks, including on Linux CI.
+beforeEach(() => vi.spyOn(process, 'platform', 'get').mockReturnValue('win32'))
+afterEach(() => vi.restoreAllMocks())
+
 const mocks = vi.hoisted(() => ({
   isPackaged: true,
   exePath: 'C:\\Users\\Test User\\AppData\\Local\\Programs\\Edge-Drop\\Edge-Drop.exe',

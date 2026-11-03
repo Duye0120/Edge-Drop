@@ -154,7 +154,7 @@ interface AppState {
   /* hydration + sync */
   hydrate: () => Promise<void>
   manualCheckState: {
-    status: 'idle' | 'checking' | 'up-to-date' | 'available' | 'downloading' | 'error'
+    status: 'idle' | 'checking' | 'up-to-date' | 'available' | 'downloading' | 'disabled' | 'error'
     version?: string
     /** What failed (the message itself is logged, not shown: it is English). */
     error?: 'check' | 'download'
@@ -406,6 +406,8 @@ export const useStore = create<AppState>((set, get) => ({
           manualCheckState: { status: 'up-to-date', version: res.version },
           manualUpdateActive: false
         })
+      } else if (res.status === 'disabled') {
+        set({ manualCheckState: { status: 'disabled', version: res.version }, manualUpdateActive: false })
       } else {
         console.warn('[Update] check failed:', res.error)
         set({

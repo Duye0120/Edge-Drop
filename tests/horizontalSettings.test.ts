@@ -177,10 +177,11 @@ describe('Horizontal Card Shelf Settings Layout', () => {
     expect(groups).toContain('verticalPositionTitle')
     expect(groups).toContain('panelHeightTitle')
     expect(groups).toContain('edgeTriggerPositionTitle')
-    // in both docks: thickness, the 3-mode updater, clean-up, hover area presets
+    // in both docks: thickness, disabled fork updates, clean-up, hover area presets
     expect(groups).toContain("id: 'trigger-thickness'")
     expect(groups).toContain('handleThicknessRelease')
-    expect(groups).toContain('(v) => patch({ updateMode: v })')
+    expect(groups).toContain('desc: boardStrings().disabledUpdates')
+    expect(groups).not.toContain('(v) => patch({ updateMode: v })')
     expect(groups).toContain('clearUnpinnedOnRestart')
     expect(groups).toContain("t('appearance.small')")
     expect(groups).toContain("t('position.medium')")

@@ -65,7 +65,7 @@ describe('Unified Open-State Retention Across All 4 Edges', () => {
 
   it('verifies isInsideBlade checks edgeTransition and uses consistent 218px blade height for top dock', () => {
     const hoverSrc = read('src/hooks/useEdgeHover.ts')
-    expect(hoverSrc).toContain('if (state.sliderActive || state.edgeTransition?.active) return true')
+    expect(hoverSrc).toContain('if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return true')
     expect(hoverSrc).toContain('const bladeHeight = 218')
     expect(hoverSrc).not.toContain('state.settingsOpen ? 480 : 218')
     expect(hoverSrc).toContain('y <= bladeHeight')
@@ -82,7 +82,7 @@ describe('Unified Open-State Retention Across All 4 Edges', () => {
 
   it('verifies closePanel and scheduleClose guard against active edge transitions', () => {
     const hoverSrc = read('src/hooks/useEdgeHover.ts')
-    expect(hoverSrc).toContain('if (state.sliderActive || state.edgeTransition?.active) return')
+    expect(hoverSrc).toContain('if (state.sliderActive || state.boardEditing || state.edgeTransition?.active) return')
   })
 
   it('verifies Settings.tsx preserves position tab on orientation toggle', () => {

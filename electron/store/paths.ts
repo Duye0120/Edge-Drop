@@ -74,10 +74,10 @@ export function isStagedTempPath(p: string): boolean {
 
 function needsUnpackagedCopy(filePath: string): boolean {
   if (!isStoreBuild() || !filePath) return false
-  const lower = filePath.toLowerCase()
+  const lower = filePath.replace(/\//g, '\\').toLowerCase()
   if (lower.includes('\\packages\\') || lower.includes('\\windowsapps\\')) return true
   try {
-    return lower.startsWith(PATHS.root().toLowerCase())
+    return lower.startsWith(PATHS.root().replace(/\//g, '\\').toLowerCase())
   } catch {
     return false
   }

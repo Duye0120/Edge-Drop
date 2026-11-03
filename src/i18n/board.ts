@@ -15,6 +15,8 @@ const en = {
   recovered: 'Recovered the last backup. The unreadable file was preserved; the latest change may be missing.',
   invalidTime: 'Choose a valid local date and time, or remove the time.', draft: 'Draft · save to keep',
   disabledUpdates: 'Automatic updates are disabled in this custom version.',
+  conflict: 'This card changed since you opened it. Choose which text and time to keep before saving.',
+  keepDraft: 'Keep my draft', useSaved: 'Use saved card',
 } as const
 type BoardStrings = { [K in keyof typeof en]: string }
 const zh: BoardStrings = {
@@ -32,6 +34,8 @@ const zh: BoardStrings = {
   recovered: '已从上次备份恢复，无法读取的原文件已保留；最近一次更改可能缺失。',
   invalidTime: '请选择有效的本地日期和时间，或移除时间。', draft: '草稿 · 保存后保留',
   disabledUpdates: '此定制版已禁用自动更新。',
+  conflict: '此卡片在编辑期间已更改。请先选择要保留的内容和时间，再保存。',
+  keepDraft: '保留我的草稿', useSaved: '使用已保存卡片',
 }
 
 /** New personal-card UI supports Chinese and English; other app languages fall back to English. */

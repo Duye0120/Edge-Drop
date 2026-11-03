@@ -54,7 +54,7 @@
 .board-undo button { color: inherit; text-decoration: underline; padding: 3px; }
 .board-horizontal { flex-direction: row; }
 .board-horizontal .board-toolbar { width: 215px; flex-shrink: 0; padding-top: 3px; }
-.board-horizontal .board-main { display: flex; flex-direction: column; padding-top: 0; }
+.board-horizontal .board-main { display: flex; flex-direction: row; align-items: flex-start; gap: 12px; padding-top: 0; }
 .board-horizontal .board-groups { display: flex; align-items: flex-start; gap: 10px; }
 .board-horizontal .board-group { width: 210px; flex-shrink: 0; }
 .board-horizontal .board-main { overflow-x: auto; }

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
 
 const mocks = vi.hoisted(() => ({
@@ -64,7 +64,9 @@ import { nativeTheme } from 'electron'
 describe('Tray Icon Theme Adaptation (Issue #64)', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
+    vi.spyOn(process, 'platform', 'get').mockReturnValue('win32')
   })
+  afterEach(() => vi.restoreAllMocks())
 
   it('defines both PATHS.trayIcon and PATHS.trayDarkIcon', () => {
     const whitePath = PATHS.trayIcon()

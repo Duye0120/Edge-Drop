@@ -616,7 +616,7 @@ export function Panel() {
             <div
               style={{
                 gridArea: '1 / 1 / 2 / 2',
-                display: 'flex',
+                display: personal ? 'none' : 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden',
                 position: 'relative',

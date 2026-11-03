@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef, useLayoutEffect, type ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '../store/appStore'
-import type { DisplayInfo, UpdateMode } from '../../shared/types'
+import type { DisplayInfo } from '../../shared/types'
+import { boardStrings } from '../i18n/board'
 import {
   resolveUpdateMode,
   normalizeHoverOpenDelay,
@@ -788,6 +789,8 @@ export function Settings({
                   {version}
                 </>
               )
+            : status === 'disabled'
+              ? boardStrings().disabledUpdates
             : status === 'error'
               ? t(checkState.error === 'download' ? 'behaviour.updateDownloadFailed' : 'behaviour.updateCheckFailed')
               : version,
@@ -798,7 +801,7 @@ export function Settings({
           className={`set-row-icon-btn${status === 'checking' ? ' is-busy' : ''}`}
           title={buttonLabel}
           aria-label={buttonLabel}
-          disabled={status === 'checking'}
+          disabled={status === 'checking' || status === 'disabled'}
           onClick={() => {
             playButtonClickSound()
             handleManualCheck()
@@ -1069,21 +1072,7 @@ export function Settings({
             {
               id: 'update-mode',
               title: t('behaviour.autoUpdatesTitle'),
-              desc:
-                updateMode === 'auto'
-                  ? t('behaviour.autoUpdatesDescOn')
-                  : updateMode === 'notify'
-                    ? (t('behaviour.updateModeNotifyDesc') || 'Notify when updates are available without downloading')
-                    : t('behaviour.autoUpdatesDescOff'),
-              below: pills<UpdateMode>(
-                [
-                  { label: t('behaviour.updateModeAuto') || 'Automatic', val: 'auto' },
-                  { label: t('behaviour.updateModeNotify') || 'Notify me', val: 'notify' },
-                  { label: t('behaviour.updateModeOff') || 'Off', val: 'off' }
-                ],
-                (v) => updateMode === v,
-                (v) => patch({ updateMode: v })
-              )
+              desc: boardStrings().disabledUpdates
             },
             ...(updateCheck ? [updateCheck] : [])
           ]

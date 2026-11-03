@@ -1,7 +1,16 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { isUpdateMode, resolveUpdateMode } from '../shared/types'
+import { useStore } from '../src/store/appStore'
 
 describe('updateMode resolution and legacy migration', () => {
+  it('reports the fork-disabled response without presenting an update error', async () => {
+    vi.stubGlobal('window', { edge: { checkForUpdatesManual: async () => ({ status: 'disabled', version: '0.4.0' }) } })
+    try {
+      await useStore.getState().startManualCheck()
+      expect(useStore.getState().manualCheckState).toEqual({ status: 'disabled', version: '0.4.0' })
+      expect(useStore.getState().manualUpdateActive).toBe(false)
+    } finally { vi.unstubAllGlobals(); useStore.getState().resetManualCheck() }
+  })
   it('defaults to auto when nothing is stored', () => {
     expect(resolveUpdateMode({})).toBe('auto')
   })

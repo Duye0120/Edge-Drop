@@ -30,7 +30,7 @@ const timestamp = (value: unknown): value is number =>
 const optionalTime = (value: unknown): value is number | null => value === null || timestamp(value)
 
 export function validateBoardDraft(value: unknown): BoardDraft {
-  if (!value || typeof value !== 'object') throw new Error('Invalid card')
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid card')
   const v = value as BoardDraft
   if (v.kind !== 'todo' && v.kind !== 'memo') throw new Error('Invalid card kind')
   if (typeof v.text !== 'string' || !v.text.trim() || v.text.length > BOARD_TEXT_MAX) throw new Error('Invalid card text')
@@ -114,5 +114,5 @@ export function localDateTimeInput(time: number | null): string {
   if (time === null) return ''
   const date = new Date(time)
   const pad = (n: number) => String(n).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+  return `${String(date.getFullYear()).padStart(4, '0')}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
 }

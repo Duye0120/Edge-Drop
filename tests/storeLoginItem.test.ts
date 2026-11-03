@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+// Select the Windows code path; all OS writes are mocked below.
+beforeEach(() => vi.spyOn(process, 'platform', 'get').mockReturnValue('win32'))
+afterEach(() => vi.restoreAllMocks())
+
 const mocks = vi.hoisted(() => ({
   isPackaged: true,
   setLoginItemSettings: vi.fn(),
