@@ -361,7 +361,13 @@ export function Panel() {
     transition: mounted ? currentTransition : 'none',
     opacity: currentOpacity
   }
-  if (settings.gameMode && !open) containerStyle.visibility = 'hidden'
+  if (settings.gameMode && !open) {
+    containerStyle.visibility = 'hidden'
+    // Descendants may explicitly set visibility for card culling. Fade the
+    // entire surface to zero immediately so none can expose the edge strip.
+    containerStyle.opacity = 0
+    containerStyle.transition = 'none'
+  }
   if (isTransitioning) {
     containerStyle.willChange = 'clip-path, opacity'
   }
